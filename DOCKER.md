@@ -634,20 +634,66 @@ docker build --no-cache -t sankalpam-api:latest .
 
 ### Required
 - `GOOGLE_API_KEY` - Google Geolocation API Key (from Google Cloud Console)
+  - **Security:** Must be passed at runtime via `-e` flag, NEVER in Dockerfile
+  - **Why:** Secrets baked into images are visible to anyone with access to the image
+  - **How:** `docker run -e GOOGLE_API_KEY=your-key ...`
 
 ### Optional
 - `JAVA_OPTS` - JVM options (default: `-Xmx512m -Xms256m`)
 - `SPRING_PROFILES_ACTIVE` - Spring profile (default: `prod`)
 - `SERVER_PORT` - Server port (default: `8081`)
 
-### Example Usage
+### Security Best Practices
+
+1. **Never hardcode secrets in Dockerfile**
+   ```dockerfile
+   # ❌ BAD - Exposes secret in image
+   ENV GOOGLE_API_KEY=secret-key-12345
+   
+   # ✅ GOOD - Pass at runtime
+   # Note: GOOGLE_API_KEY must be passed at runtime via -e flag
+   ```
+
+2. **Pass secrets at runtime**
+   ```cmd
+   docker run -e GOOGLE_API_KEY=%GOOGLE_API_KEY% sankalpam-api:latest
+   ```
+
+3. **Use secure secret management for production**
+   - Docker Secrets (Swarm)
+   - Kubernetes Secrets (K8s)
+   - Cloud provider secret managers (AWS, Azure, GCP)
+   - Environment file with restricted permissions
+
+### Example Usage (SECURE)
 ```cmd
+REM Set in environment first
+set GOOGLE_API_KEY=your-key
+
+REM Pass to container (key is NOT in image)
 docker run -d ^
     -p 8081:8081 ^
-    -e GOOGLE_API_KEY=your-key ^
+    -e GOOGLE_API_KEY=%GOOGLE_API_KEY% ^
     -e JAVA_OPTS="-Xmx1g -Xms512m -XX:+UseG1GC" ^
     -e SPRING_PROFILES_ACTIVE=prod ^
     sankalpam-api:latest
+```
+
+### Example Usage (Docker Compose - SECURE)
+```yaml
+version: '3.8'
+services:
+  sankalpam-api:
+    image: sankalpam-api:latest
+    environment:
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY}  # Loaded from system env var
+      JAVA_OPTS: "-Xmx1g -Xms512m"
+```
+
+Then pass the key:
+```cmd
+set GOOGLE_API_KEY=your-key
+docker-compose up
 ```
 
 ---

@@ -23,9 +23,9 @@ EXPOSE 8081
 # Health check using Spring Boot actuator
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:8081/actuator/health || exit 1
-# Set environment variables (can be overridden at runtime)
+# Set non-sensitive environment variables
 ENV JAVA_OPTS="-Xmx512m -Xms256m"
-ENV GOOGLE_API_KEY=""
 ENV SPRING_PROFILES_ACTIVE="prod"
+# Note: GOOGLE_API_KEY must be passed at runtime via -e flag, not in image
 # Run the application
 CMD ["sh", "-c", "java $JAVA_OPTS -jar sankalpam-api-1.0.0.jar"]
