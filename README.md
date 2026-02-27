@@ -1,5 +1,6 @@
 README - Running the Sankalpam API
 ==================================
+To provide sankalpam for everyday
 
 QUICK START
 ===========
