@@ -124,11 +124,28 @@ echo [INFO] Mode: !RUN_MODE!
 echo [INFO] Port: !PORT!
 echo.
 
-REM Check if GOOGLE_API_KEY is set
+REM Check if GOOGLE_API_KEY is set, prompt if not
 if "!GOOGLE_API_KEY!"=="" (
     echo [WARNING] GOOGLE_API_KEY environment variable not set
-    echo [WARNING] Please set GOOGLE_API_KEY before running the API
-    echo [INFO] You can set it in PowerShell: $env:GOOGLE_API_KEY="your-key"
+    echo.
+    echo Please provide your Google Geolocation API Key:
+    echo (Get one from: https://console.cloud.google.com)
+    echo.
+    set /p GOOGLE_API_KEY="Enter GOOGLE_API_KEY: "
+    echo.
+
+    if "!GOOGLE_API_KEY!"=="" (
+        color 0C
+        echo [ERROR] GOOGLE_API_KEY cannot be empty
+        echo Please obtain an API key from: https://console.cloud.google.com
+        pause
+        goto end
+    )
+
+    echo [OK] API Key set: !GOOGLE_API_KEY!
+    echo.
+) else (
+    echo [INFO] Using GOOGLE_API_KEY from environment
     echo.
 )
 
