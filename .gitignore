@@ -14,19 +14,17 @@ buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
 
-# IDE
+# IDE - EXCLUDED
 .idea/
 .vscode/
 *.swp
 *.swo
 *~
-.DS_Store
 *.iml
 .classpath
 .project
 .settings/
 bin/
-.gradle
 .gradle/
 
 # Build
@@ -37,7 +35,7 @@ out/
 *.so
 *.dylib
 
-# Logs
+# Logs - EXCLUDED
 *.log
 logs/
 application-runtime.log*
@@ -57,14 +55,11 @@ temp_*
 __pycache__/
 *.py[cod]
 *$py.class
-*.so
 .Python
 env/
 venv/
 ENV/
-build/
 develop-eggs/
-dist/
 downloads/
 eggs/
 .eggs/
@@ -90,25 +85,4 @@ Thumbs.db
 # Generated files
 GENERATED_MAPPINGS.txt
 extract_excel_output.txt
-
-# Only commit essential .txt files
-!QUICK_START.txt
-!QUICK_REFERENCE.txt
-!QUICK_REFERENCE_TESTING.txt
-!BAT_FILES_CONSOLIDATED.txt
-!README.md
-
-# Keep source code and essential configs
-!src/
-!pom.xml
-!run.bat
-
-# Keep essential docs
-!docs/
-!postman/
-!.idea/
-!.vscode/
-
-# Keep lookup data
-!src/main/resources/lookup/
 
