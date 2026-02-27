@@ -1,0 +1,428 @@
+{
+  "info": {
+    "name": "Sankalpam API",
+    "description": "Collection for testing the Sankalpam REST API - Form submission for Hindu prayer vows",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "item": [
+    {
+      "name": "1. Get Metadata",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/sankalpam/metadata",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "sankalpam",
+            "metadata"
+          ]
+        },
+        "description": "Retrieve dropdown options for all Panchanga calendar fields.\n\nReturns:\n- Samvatsarams (60 year cycle)\n- Ayanams (Uttarayanam/Dakshinayanam)\n- Ruthus (6 seasons)\n- Masams (12 months)\n- Pakshams (Light/Dark fortnight)\n- Tithis (lunar days)\n- Vaasarams (days of week)\n- Nakshatrams (27 birth stars)\n- Rasis (12 zodiac signs)"
+      },
+      "response": []
+    },
+    {
+      "name": "2. Submit Sankalpam - Valid Request",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"Rama Sharma\",\n  \"gotram\": \"Bharadwaja\",\n  \"nakshatram\": \"Rohini\",\n  \"rasi\": \"Vrishabha (Taurus)\",\n  \"samvatsaram\": \"Pingala\",\n  \"ayanam\": \"Uttarayanam\",\n  \"ruthu\": \"Vasantha Ruthu\",\n  \"masam\": \"Chaitra\",\n  \"paksham\": \"Shukla Paksham\",\n  \"tithi\": \"Prathama\",\n  \"vaasaram\": \"Bhanu Vaasaram (Sunday)\",\n  \"country\": \"USA\",\n  \"city\": \"New York\",\n  \"state\": \"New York\",\n  \"sankalpaPurpose\": \"Satyanarayana Pooja\",\n  \"additionalNotes\": \"May this sankalpa be fulfilled with divine blessings\",\n  \"email\": \"rama.sharma@example.com\",\n  \"phone\": \"+15551234567\"\n}\n"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/sankalpam/submit",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "sankalpam",
+            "submit"
+          ]
+        },
+        "description": "Submit a valid Sankalpam form.\n\nExpected Response:\n- Status: 201 Created\n- Returns referenceId, submittedFor, and submittedAt timestamp\n\nRequired Fields:\n- fullName, gotram, nakshatram, rasi\n- samvatsaram, ayanam, ruthu, masam, paksham, tithi, vaasaram\n- country, city, state\n- sankalpaPurpose\n\nOptional Fields:\n- additionalNotes\n- email (must be valid format)\n- phone (must match E.164 format)"
+      },
+      "response": []
+    },
+    {
+      "name": "3. Submit Sankalpam - Missing Name (Validation Error)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"\",\n  \"gotram\": \"Bharadwaja\",\n  \"nakshatram\": \"Rohini\",\n  \"rasi\": \"Vrishabha (Taurus)\",\n  \"samvatsaram\": \"Pingala\",\n  \"ayanam\": \"Uttarayanam\",\n  \"ruthu\": \"Vasantha Ruthu\",\n  \"masam\": \"Chaitra\",\n  \"paksham\": \"Shukla Paksham\",\n  \"tithi\": \"Prathama\",\n  \"vaasaram\": \"Bhanu Vaasaram (Sunday)\",\n  \"country\": \"USA\",\n  \"city\": \"New York\",\n  \"state\": \"New York\",\n  \"sankalpaPurpose\": \"Satyanarayana Pooja\"\n}\n"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/sankalpam/submit",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "sankalpam",
+            "submit"
+          ]
+        },
+        "description": "Test validation error handling.\n\nExpected Response:\n- Status: 422 Unprocessable Entity\n- Error message with field validation details\n- Returns errors map with fullName validation message"
+      },
+      "response": []
+    },
+    {
+      "name": "4. Submit Sankalpam - Invalid Name Pattern",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"Rama123@#$%\",\n  \"gotram\": \"Bharadwaja\",\n  \"nakshatram\": \"Rohini\",\n  \"rasi\": \"Vrishabha (Taurus)\",\n  \"samvatsaram\": \"Pingala\",\n  \"ayanam\": \"Uttarayanam\",\n  \"ruthu\": \"Vasantha Ruthu\",\n  \"masam\": \"Chaitra\",\n  \"paksham\": \"Shukla Paksham\",\n  \"tithi\": \"Prathama\",\n  \"vaasaram\": \"Bhanu Vaasaram (Sunday)\",\n  \"country\": \"USA\",\n  \"city\": \"New York\",\n  \"state\": \"New York\",\n  \"sankalpaPurpose\": \"Satyanarayana Pooja\"\n}\n"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/sankalpam/submit",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "sankalpam",
+            "submit"
+          ]
+        },
+        "description": "Test regex pattern validation for name field.\n\nName pattern: ^[A-Za-z\\\\s.'-]+$ (letters, spaces, dots, hyphens, apostrophes only)\n\nExpected Response:\n- Status: 422 Unprocessable Entity\n- Error: Name contains invalid characters"
+      },
+      "response": []
+    },
+    {
+      "name": "5. Submit Sankalpam - Invalid Ayanam",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"Lakshmana Kumar\",\n  \"gotram\": \"Vasista\",\n  \"nakshatram\": \"Ashwini\",\n  \"rasi\": \"Mesha (Aries)\",\n  \"samvatsaram\": \"Pingala\",\n  \"ayanam\": \"InvalidAyanam\",\n  \"ruthu\": \"Vasantha Ruthu\",\n  \"masam\": \"Chaitra\",\n  \"paksham\": \"Shukla Paksham\",\n  \"tithi\": \"Prathama\",\n  \"vaasaram\": \"Soma Vaasaram (Monday)\",\n  \"country\": \"India\",\n  \"city\": \"Hyderabad\",\n  \"state\": \"Telangana\",\n  \"sankalpaPurpose\": \"Veda Archana\"\n}\n"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/sankalpam/submit",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "sankalpam",
+            "submit"
+          ]
+        },
+        "description": "Test enum validation for Ayanam.\n\nValid values: Uttarayanam, Dakshinayanam\n\nExpected Response:\n- Status: 422 Unprocessable Entity\n- Error: Invalid Ayanam value"
+      },
+      "response": []
+    },
+    {
+      "name": "6. Submit Sankalpam - Invalid Paksham",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"Sita Devi\",\n  \"gotram\": \"Kausika\",\n  \"nakshatram\": \"Punarvasu\",\n  \"rasi\": \"Mithuna (Gemini)\",\n  \"samvatsaram\": \"Dhatus\",\n  \"ayanam\": \"Dakshinayanam\",\n  \"ruthu\": \"Greeshma Ruthu\",\n  \"masam\": \"Vaishakha\",\n  \"paksham\": \"BadPaksham\",\n  \"tithi\": \"Dashami\",\n  \"vaasaram\": \"Budha Vaasaram (Wednesday)\",\n  \"country\": \"India\",\n  \"city\": \"Banglore\",\n  \"state\": \"Karnataka\",\n  \"sankalpaPurpose\": \"Lakshmi Pooja\"\n}\n"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/sankalpam/submit",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "sankalpam",
+            "submit"
+          ]
+        },
+        "description": "Test enum validation for Paksham.\n\nValid values: Shukla Paksham, Krishna Paksham\n\nExpected Response:\n- Status: 422 Unprocessable Entity\n- Error: Invalid Paksham value"
+      },
+      "response": []
+    },
+    {
+      "name": "7. Submit Sankalpam - Invalid Email Format",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"Keshava Prasad\",\n  \"gotram\": \"Atreya\",\n  \"nakshatram\": \"Magha\",\n  \"rasi\": \"Simha (Leo)\",\n  \"samvatsaram\": \"Eeshwara\",\n  \"ayanam\": \"Uttarayanam\",\n  \"ruthu\": \"Hemantha Ruthu\",\n  \"masam\": \"Margasira\",\n  \"paksham\": \"Krishna Paksham\",\n  \"tithi\": \"Chaturdashi\",\n  \"vaasaram\": \"Guru Vaasaram (Thursday)\",\n  \"country\": \"USA\",\n  \"city\": \"San Francisco\",\n  \"state\": \"California\",\n  \"sankalpaPurpose\": \"Ganesha Pooja\",\n  \"email\": \"invalid.email.format\"\n}\n"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/sankalpam/submit",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "sankalpam",
+            "submit"
+          ]
+        },
+        "description": "Test email format validation.\n\nExpected Response:\n- Status: 422 Unprocessable Entity\n- Error: Invalid email address format"
+      },
+      "response": []
+    },
+    {
+      "name": "8. Submit Sankalpam - Invalid Phone Format",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"Vishnu Murthy\",\n  \"gotram\": \"Jamadagni\",\n  \"nakshatram\": \"Uttara Phalguni\",\n  \"rasi\": \"Kanya (Virgo)\",\n  \"samvatsaram\": \"Bahudhanya\",\n  \"ayanam\": \"Dakshinayanam\",\n  \"ruthu\": \"Sharath Ruthu\",\n  \"masam\": \"Ashwija\",\n  \"paksham\": \"Shukla Paksham\",\n  \"tithi\": \"Pournami / Amavasya\",\n  \"vaasaram\": \"Shukra Vaasaram (Friday)\",\n  \"country\": \"UK\",\n  \"city\": \"London\",\n  \"state\": \"England\",\n  \"sankalpaPurpose\": \"Durga Pooja\",\n  \"phone\": \"123\"\n}\n"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/sankalpam/submit",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "sankalpam",
+            "submit"
+          ]
+        },
+        "description": "Test phone number format validation.\n\nPhone pattern: ^(\\\\+?[1-9]\\\\d{1,14})?$ (E.164 format)\nValid examples: +1-555-123-4567, +919876543210, 5551234567\n\nExpected Response:\n- Status: 422 Unprocessable Entity\n- Error: Invalid phone number format"
+      },
+      "response": []
+    },
+    {
+      "name": "9. Submit Sankalpam - Sankalpa Purpose Too Short",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"Arjun Singh\",\n  \"gotram\": \"Kasyapa\",\n  \"nakshatram\": \"Anuradha\",\n  \"rasi\": \"Vrischika (Scorpio)\",\n  \"samvatsaram\": \"Pramaadhi\",\n  \"ayanam\": \"Uttarayanam\",\n  \"ruthu\": \"Shishira Ruthu\",\n  \"masam\": \"Pushya\",\n  \"paksham\": \"Krishna Paksham\",\n  \"tithi\": \"Ekadashi\",\n  \"vaasaram\": \"Shani Vaasaram (Saturday)\",\n  \"country\": \"Canada\",\n  \"city\": \"Toronto\",\n  \"state\": \"Ontario\",\n  \"sankalpaPurpose\": \"Pooja\"\n}\n"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/sankalpam/submit",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "sankalpam",
+            "submit"
+          ]
+        },
+        "description": "Test minimum length validation for Sankalpa purpose.\n\nRequirement: Min 5 characters, Max 500 characters\n\nExpected Response:\n- Status: 422 Unprocessable Entity\n- Error: Sankalpa must be between 5 and 500 characters"
+      },
+      "response": []
+    },
+    {
+      "name": "10. Submit Sankalpam - Multiple Validation Errors",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"\",\n  \"gotram\": \"A\",\n  \"nakshatram\": \"\",\n  \"rasi\": \"\",\n  \"samvatsaram\": \"\",\n  \"ayanam\": \"BadAyanam\",\n  \"ruthu\": \"\",\n  \"masam\": \"\",\n  \"paksham\": \"BadPaksham\",\n  \"tithi\": \"\",\n  \"vaasaram\": \"\",\n  \"country\": \"\",\n  \"city\": \"X\",\n  \"state\": \"\",\n  \"sankalpaPurpose\": \"Puj\"\n}\n"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/sankalpam/submit",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "sankalpam",
+            "submit"
+          ]
+        },
+        "description": "Test handling of multiple validation errors.\n\nExpected Response:\n- Status: 422 Unprocessable Entity\n- Error map containing messages for all invalid fields"
+      },
+      "response": []
+    },
+    {
+      "name": "11. Submit Sankalpam - Malformed JSON",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"John Doe\",\n  \"gotram\": \"Vasista\"\n  INVALID JSON\n}\n"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/sankalpam/submit",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "sankalpam",
+            "submit"
+          ]
+        },
+        "description": "Test malformed JSON error handling.\n\nExpected Response:\n- Status: 400 Bad Request\n- Error: Request body is malformed or missing"
+      },
+      "response": []
+    },
+    {
+      "name": "12. Health Check - Actuator",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/actuator/health",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "actuator",
+            "health"
+          ]
+        },
+        "description": "Check application health status.\n\nExpected Response:\n- Status: 200 OK\n- Shows application status (UP/DOWN)"
+      },
+      "response": []
+    },
+    {
+      "name": "13. Application Info - Actuator",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/actuator/info",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "actuator",
+            "info"
+          ]
+        },
+        "description": "Get application information.\n\nExpected Response:\n- Status: 200 OK\n- Application name and version"
+      },
+      "response": []
+    }
+  ]
+}

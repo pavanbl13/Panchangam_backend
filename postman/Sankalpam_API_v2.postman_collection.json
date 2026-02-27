@@ -1,0 +1,414 @@
+{
+  "info": {
+    "name": "Sankalpam API v2.0 - Complete",
+    "description": "Complete collection for testing the Sankalpam REST API\n\n✅ Updated: February 24, 2026\n✅ Port: 8081 (changed from 8080)\n✅ All endpoints tested and validated\n\nFeatures:\n- Sankalpam Finder (simplified 3-field form)\n- Full Sankalpam Submission (comprehensive form)\n- Metadata retrieval for all dropdowns\n- Health & Info endpoints\n- Complete validation testing",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "2.0.0"
+  },
+  "item": [
+    {
+      "name": "Health & Status",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8081/actuator/health",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["actuator", "health"]
+            },
+            "description": "Check if the application is running and healthy.\n\nExpected Response:\n- Status: 200 OK\n- Body: {\"status\": \"UP\"}"
+          },
+          "response": []
+        },
+        {
+          "name": "Application Info",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8081/actuator/info",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["actuator", "info"]
+            },
+            "description": "Get application information including name and version.\n\nExpected Response:\n- Status: 200 OK\n- Body: {\"app\": {\"name\": \"Sankalpam API\", \"version\": \"1.0.0\"}}"
+          },
+          "response": []
+        }
+      ],
+      "description": "Health check and application info endpoints"
+    },
+    {
+      "name": "Metadata",
+      "item": [
+        {
+          "name": "Get All Metadata",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/sankalpam/metadata",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "sankalpam", "metadata"]
+            },
+            "description": "Retrieve all dropdown options for Panchanga calendar fields.\n\nReturns 9 arrays:\n✅ samvatsarams (60 year cycle names)\n✅ ayanams (Uttarayanam/Dakshinayanam)\n✅ ruthus (6 seasons)\n✅ masams (12 lunar months)\n✅ pakshams (Shukla/Krishna Paksham)\n✅ tithis (15 lunar days)\n✅ vaasarams (7 days of week)\n✅ nakshatrams (27 birth stars)\n✅ rasis (12 zodiac signs)\n\nExpected Response:\n- Status: 200 OK\n- success: true\n- data: Object with all 9 arrays"
+          },
+          "response": []
+        }
+      ],
+      "description": "Metadata endpoints for dropdown values"
+    },
+    {
+      "name": "Sankalpam Finder",
+      "item": [
+        {
+          "name": "Find Sankalpam - Valid Request",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"2026-02-24\",\n  \"time\": \"18:30\",\n  \"city\": \"New York\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/v1/sankalpam/find",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "sankalpam", "find"]
+            },
+            "description": "⭐ NEW ENDPOINT - Find Sankalpam for a given date, time, and city.\n\nThis is the simplified 3-field form that calls external API to calculate Panchanga.\n\nRequest Format:\n✅ date: YYYY-MM-DD format (e.g., 2026-02-24)\n✅ time: HH:MM format, 24-hour (e.g., 18:30)\n✅ city: City name (e.g., New York, Mumbai, Sydney)\n\nExpected Response:\n- Status: 200 OK\n- success: true\n- data: {\n    requestId: string,\n    date: string,\n    time: string,\n    city: string,\n    sunrise: string,\n    sunset: string,\n    validUntil: string,\n    panchanga: {\n      samvatsaram, ayanam, ruthu, masam,\n      paksham, tithi, vaasaram, nakshatram, rasi\n    }\n  }"
+          },
+          "response": []
+        },
+        {
+          "name": "Find Sankalpam - Mumbai",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"2026-03-15\",\n  \"time\": \"10:00\",\n  \"city\": \"Mumbai\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/v1/sankalpam/find",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "sankalpam", "find"]
+            },
+            "description": "Example request for Mumbai, India timezone."
+          },
+          "response": []
+        },
+        {
+          "name": "Find Sankalpam - Invalid Date Format",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"24/02/2026\",\n  \"time\": \"18:30\",\n  \"city\": \"New York\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/v1/sankalpam/find",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "sankalpam", "find"]
+            },
+            "description": "❌ Test validation error for invalid date format.\n\nRequired pattern: YYYY-MM-DD\nValid: 2026-02-24, 2026-12-31\nInvalid: 24/02/2026, 02-24-2026\n\nExpected Response:\n- Status: 422 Unprocessable Entity\n- success: false\n- errors: {\"date\": [\"Date must be in YYYY-MM-DD format\"]}"
+          },
+          "response": []
+        },
+        {
+          "name": "Find Sankalpam - Invalid Time Format",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"2026-02-24\",\n  \"time\": \"25:00\",\n  \"city\": \"New York\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/v1/sankalpam/find",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "sankalpam", "find"]
+            },
+            "description": "❌ Test validation error for invalid time.\n\nTime pattern: HH:MM (24-hour format, 0-23 hours)\nValid: 00:00, 18:30, 23:59\nInvalid: 25:00, 10:60, 24:00\n\nExpected Response:\n- Status: 422 Unprocessable Entity\n- success: false\n- errors: {\"time\": [\"Time must be in HH:MM format (24-hour)\"]}"
+          },
+          "response": []
+        },
+        {
+          "name": "Find Sankalpam - Missing City",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"2026-02-24\",\n  \"time\": \"18:30\",\n  \"city\": \"\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/v1/sankalpam/find",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "sankalpam", "find"]
+            },
+            "description": "❌ Test validation error for missing city.\n\nCity requirements:\n- Required: Yes\n- Min length: 2 characters\n- Max length: 100 characters\n\nExpected Response:\n- Status: 422 Unprocessable Entity\n- success: false\n- errors: {\"city\": [\"City is required\"]}"
+          },
+          "response": []
+        },
+        {
+          "name": "Find Sankalpam - City Too Short",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"2026-02-24\",\n  \"time\": \"18:30\",\n  \"city\": \"A\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/v1/sankalpam/find",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "sankalpam", "find"]
+            },
+            "description": "❌ Test validation error for city name too short.\n\nExpected Response:\n- Status: 422 Unprocessable Entity\n- errors: {\"city\": [\"City must be between 2 and 100 characters\"]}"
+          },
+          "response": []
+        }
+      ],
+      "description": "Sankalpam Finder API - Simplified 3-field form with external API integration"
+    },
+    {
+      "name": "Sankalpam Submit",
+      "item": [
+        {
+          "name": "Submit Sankalpam - Valid Full Request",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Rama Sharma\",\n  \"gotram\": \"Bharadwaja\",\n  \"nakshatram\": \"Rohini\",\n  \"rasi\": \"Vrishabha (Taurus)\",\n  \"samvatsaram\": \"Pingala\",\n  \"ayanam\": \"Uttarayanam\",\n  \"ruthu\": \"Vasantha Ruthu\",\n  \"masam\": \"Chaitra\",\n  \"paksham\": \"Shukla Paksham\",\n  \"tithi\": \"Prathama\",\n  \"vaasaram\": \"Bhanu Vaasaram (Sunday)\",\n  \"country\": \"USA\",\n  \"city\": \"New York\",\n  \"state\": \"New York\",\n  \"sankalpaPurpose\": \"Satyanarayana Pooja for family prosperity and well-being\",\n  \"additionalNotes\": \"Special pooja for auspicious occasion\",\n  \"email\": \"rama.sharma@example.com\",\n  \"phone\": \"+12125551234\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/v1/sankalpam/submit",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "sankalpam", "submit"]
+            },
+            "description": "Submit a complete Sankalpam form with all fields.\n\nThis is the comprehensive form with all Panchanga details.\n\nExpected Response:\n- Status: 201 Created\n- success: true\n- message: \"Sankalpam submitted successfully. May this sankalpa be fulfilled.\"\n- data: {\n    referenceId: UUID,\n    submittedFor: string,\n    submittedAt: ISO timestamp\n  }"
+          },
+          "response": []
+        },
+        {
+          "name": "Submit Sankalpam - Minimal Valid",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Krishna Iyer\",\n  \"gotram\": \"Kashyapa\",\n  \"nakshatram\": \"Ashwini\",\n  \"rasi\": \"Mesha (Aries)\",\n  \"samvatsaram\": \"Vikrama\",\n  \"ayanam\": \"Uttarayanam\",\n  \"ruthu\": \"Vasantha Ruthu\",\n  \"masam\": \"Chaitra\",\n  \"paksham\": \"Shukla Paksham\",\n  \"tithi\": \"Prathama\",\n  \"vaasaram\": \"Soma Vaasaram (Monday)\",\n  \"country\": \"India\",\n  \"city\": \"Chennai\",\n  \"state\": \"Tamil Nadu\",\n  \"sankalpaPurpose\": \"Daily morning sankalpa for household peace\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/v1/sankalpam/submit",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "sankalpam", "submit"]
+            },
+            "description": "Submit with only required fields (no email, phone, or additional notes)."
+          },
+          "response": []
+        },
+        {
+          "name": "Submit Sankalpam - Invalid Name (Blank)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"\",\n  \"gotram\": \"Bharadwaja\",\n  \"nakshatram\": \"Rohini\",\n  \"rasi\": \"Vrishabha (Taurus)\",\n  \"samvatsaram\": \"Pingala\",\n  \"ayanam\": \"Uttarayanam\",\n  \"ruthu\": \"Vasantha Ruthu\",\n  \"masam\": \"Chaitra\",\n  \"paksham\": \"Shukla Paksham\",\n  \"tithi\": \"Prathama\",\n  \"vaasaram\": \"Bhanu Vaasaram (Sunday)\",\n  \"country\": \"USA\",\n  \"city\": \"New York\",\n  \"state\": \"New York\",\n  \"sankalpaPurpose\": \"Satyanarayana Pooja\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/v1/sankalpam/submit",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "sankalpam", "submit"]
+            },
+            "description": "❌ Test validation error for blank name.\n\nExpected Response:\n- Status: 422 Unprocessable Entity\n- success: false\n- errors: {\"fullName\": [\"Full name is required\", ...]}"
+          },
+          "response": []
+        },
+        {
+          "name": "Submit Sankalpam - Invalid Email",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Rama Sharma\",\n  \"gotram\": \"Bharadwaja\",\n  \"nakshatram\": \"Rohini\",\n  \"rasi\": \"Vrishabha (Taurus)\",\n  \"samvatsaram\": \"Pingala\",\n  \"ayanam\": \"Uttarayanam\",\n  \"ruthu\": \"Vasantha Ruthu\",\n  \"masam\": \"Chaitra\",\n  \"paksham\": \"Shukla Paksham\",\n  \"tithi\": \"Prathama\",\n  \"vaasaram\": \"Bhanu Vaasaram (Sunday)\",\n  \"country\": \"USA\",\n  \"city\": \"New York\",\n  \"state\": \"New York\",\n  \"sankalpaPurpose\": \"Satyanarayana Pooja\",\n  \"email\": \"invalid-email\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/v1/sankalpam/submit",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "sankalpam", "submit"]
+            },
+            "description": "❌ Test validation error for invalid email format.\n\nExpected Response:\n- Status: 422 Unprocessable Entity\n- errors: {\"email\": [\"Invalid email address format\"]}"
+          },
+          "response": []
+        },
+        {
+          "name": "Submit Sankalpam - Invalid Ayanam",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Rama Sharma\",\n  \"gotram\": \"Bharadwaja\",\n  \"nakshatram\": \"Rohini\",\n  \"rasi\": \"Vrishabha (Taurus)\",\n  \"samvatsaram\": \"Pingala\",\n  \"ayanam\": \"InvalidAyanam\",\n  \"ruthu\": \"Vasantha Ruthu\",\n  \"masam\": \"Chaitra\",\n  \"paksham\": \"Shukla Paksham\",\n  \"tithi\": \"Prathama\",\n  \"vaasaram\": \"Bhanu Vaasaram (Sunday)\",\n  \"country\": \"USA\",\n  \"city\": \"New York\",\n  \"state\": \"New York\",\n  \"sankalpaPurpose\": \"Satyanarayana Pooja\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/v1/sankalpam/submit",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "sankalpam", "submit"]
+            },
+            "description": "❌ Test validation error for invalid Ayanam value.\n\nValid values: Uttarayanam, Dakshinayanam\n\nExpected Response:\n- Status: 422 Unprocessable Entity\n- errors: {\"ayanam\": [\"Invalid Ayanam value\"]}"
+          },
+          "response": []
+        }
+      ],
+      "description": "Full Sankalpam submission API - Comprehensive form with all fields"
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8081",
+      "type": "string"
+    },
+    {
+      "key": "apiPath",
+      "value": "/api/v1/sankalpam",
+      "type": "string"
+    }
+  ]
+}
+

@@ -1,0 +1,128 @@
+QUICK START GUIDE - RUN.BAT
+===========================
+
+THREE WAYS TO RUN:
+
+1. DEBUG MODE (Dual View - Recommended for Development)
+   Command: run.bat
+   Command: run.bat debug
+   Command: run.bat true
+
+   Result:
+   - Opens 2 windows
+   - Window 1: Green console with app logs
+   - Window 2: Cyan log viewer with live updates
+   - Perfect for testing with Postman
+
+2. RELEASE MODE (Single Window - for Production Testing)
+   Command: run.bat release
+   Command: run.bat false
+
+   Result:
+   - Opens 1 window only
+   - Simple console output
+   - No separate log viewer
+
+3. JUST BUILD (No Run)
+   Command: mvn clean install -DskipTests
+
+   Result:
+   - Builds JAR file only
+   - Doesn't start application
+   - Takes ~9 seconds
+
+
+BUILD FLOW:
+-----------
+Step 1: Maven clean install -DskipTests         (9 seconds)
+Step 2: Prepare environment                     (2 seconds)
+  - Create logs directory
+  - Check/kill existing process on port 8081
+Step 3: Start application in chosen mode        (Immediate)
+
+
+WHAT YOU GET:
+
+Debug Mode:
+  Console Window (Green)
+  - Real-time Spring Boot startup messages
+  - Application logs as requests come in
+
+  Log Viewer Window (Cyan)
+  - Color-coded logs from file
+  - Green = INFO messages
+  - Yellow = WARNINGS
+  - Red = ERRORS
+  - Cyan = HTTP POST requests
+  - White = Other logs
+
+Release Mode:
+  Console Window (Single)
+  - All logs in one place
+  - Clean output
+  - Standard terminal
+
+APPLICATION READY WHEN:
+- Both/One windows open
+- See "Tomcat started" message
+- Port 8081 is listening
+
+
+TESTING YOUR APP:
+-----------------
+
+Health Check:
+  curl http://localhost:8081/actuator/health
+  OR
+  Postman: GET http://localhost:8081/actuator/health
+
+Sample API Call:
+  Postman: POST http://localhost:8081/api/find
+  Body: {
+    "fullName": "Test User",
+    "city": "Bangalore",
+    "date": "2026-02-24",
+    "time": "15:30"
+  }
+
+STOPPING THE APP:
+- Press Ctrl+C in the console window
+- Or close the console window
+- Or run: taskkill /F /IM java.exe
+
+
+TROUBLESHOOTING:
+
+Q: Build fails
+A: Check Java version (needs 21+)
+   Check Maven (needs 3.8+)
+   Check internet (needs to download deps)
+
+Q: Port 8081 in use
+A: Script auto-kills existing process
+   If not, manually: netstat -ano | findstr :8081
+
+Q: Logs not showing in viewer
+A: Check if logs directory was created
+   Check if JAR file was built
+
+Q: App won't start
+A: Check console window for errors
+   Try: java -jar target/sankalpam-api-1.0.0.jar
+
+
+KEY FEATURES ENABLED:
+- Tests SKIPPED during build (faster)
+- Automatic port cleanup
+- Dual view option for development
+- Simple mode for production
+- Color-coded log viewer
+- Error handling and feedback
+
+
+KEYBOARD SHORTCUTS:
+-------------------
+Ctrl+C     - Stop application
+Ctrl+L     - Clear console (in log viewer)
+Ctrl+K     - Clear screen (varies by terminal)
+

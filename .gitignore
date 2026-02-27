@@ -1,0 +1,114 @@
+# Maven
+target/
+*.jar
+*.war
+*.ear
+*.class
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+*.iml
+.classpath
+.project
+.settings/
+bin/
+.gradle
+.gradle/
+
+# Build
+build/
+dist/
+out/
+*.o
+*.so
+*.dylib
+
+# Logs
+*.log
+logs/
+application-runtime.log*
+test.log
+build_full.log
+build.log
+
+# Archive - Old utility files (safe to exclude)
+archive/
+
+# Temp files
+*.tmp
+temp_*
+.temp/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Node (if used)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Generated files
+GENERATED_MAPPINGS.txt
+extract_excel_output.txt
+
+# Only commit essential .txt files
+!QUICK_START.txt
+!QUICK_REFERENCE.txt
+!QUICK_REFERENCE_TESTING.txt
+!BAT_FILES_CONSOLIDATED.txt
+!README.md
+
+# Keep source code and essential configs
+!src/
+!pom.xml
+!run.bat
+
+# Keep essential docs
+!docs/
+!postman/
+!.idea/
+!.vscode/
+
+# Keep lookup data
+!src/main/resources/lookup/
+

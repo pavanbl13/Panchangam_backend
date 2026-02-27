@@ -1,0 +1,168 @@
+BAT, POWERSHELL, AND TEXT FILES CONSOLIDATED
+=============================================
+
+PROJECT STATUS: ✅ CONSOLIDATED
+Root directory is now clean with only essential files.
+
+ACTIVE FILES IN ROOT
+====================
+
+📄 run.bat
+   Purpose: Build and run the Sankalpam API application
+   Location: C:\Family\Pavan\AI\Panchangam\sankalpam-project\backend\run.bat
+
+   Usage:
+     run.bat [build] [debug]
+
+   Examples:
+     run.bat              (build + debug mode)
+     run.bat true true    (build + debug mode)
+     run.bat true false   (build + release mode)
+     run.bat false true   (no build + debug mode)
+     run.bat false false  (no build + release mode)
+
+ESSENTIAL REFERENCE .TXT FILES IN ROOT (Keep these)
+===================================================
+
+✅ QUICK_START.txt
+   - Quick start guide for the project
+
+✅ QUICK_REFERENCE.txt
+   - Quick reference for common commands and operations
+
+✅ QUICK_REFERENCE_TESTING.txt
+   - Quick reference for testing commands and approaches
+
+✅ BAT_FILES_CONSOLIDATED.txt
+   - This file - Summary of consolidation
+
+ARCHIVED FILES
+==============
+
+All other files have been moved to:
+  📁 archive/bat-files/
+
+The archive now contains:
+  ✅ 12 old .bat files
+  ✅ 6 old .ps1 files
+  ✅ 11 old .txt files (informational/historical)
+  ✅ README.md with detailed migration guide
+
+Total archived: 30 files
+
+You can safely delete the entire archive/bat-files/ folder if you no longer need reference copies.
+
+See: archive/bat-files/README.md for complete migration guide.
+
+WHAT GOT ARCHIVED
+=================
+
+OLD BAT FILES (12 files):
+  - start-app.bat
+  - start-app-with-logging.bat
+  - run-with-logs.bat
+  - run-with-dual-view.bat
+  - build.bat
+  - build-and-run.bat
+  - run-mapping-loader.bat
+  - test_api.bat
+  - test-fetch-sankalpam.bat
+  - test-valid-until.bat
+  - create-sample-mappings.bat
+  - create-mappings-powershell.bat
+
+OLD POWERSHELL FILES (6 files):
+  - monitor-logs.ps1
+  - view-logs.ps1
+  - test-google-api.ps1
+  - test-fetchSankalpam.ps1
+  - run-mapping-loader.ps1
+  - temp_log_viewer.ps1
+
+OLD TEXT FILES (11 files):
+  - BATCH_FILES_README.txt (outdated)
+  - GENERATED_MAPPINGS.txt (auto-generated)
+  - HOW_TO_SEE_LOGS.txt (outdated)
+  - GOOGLE_API_INVESTIGATION.txt (historical)
+  - REORGANIZATION_COMPLETE.txt (historical)
+  - PROJECT_STRUCTURE.txt (outdated)
+  - FIXES_APPLIED.txt (historical)
+  - FILE_ORGANIZATION_SUMMARY.txt (outdated)
+  - AUTO_BUILD_FEATURE_ADDED.txt (historical)
+  - API_RESPONSE_LOGGING_ADDED.txt (historical)
+  - SETUP_COMPLETE.txt (outdated)
+
+CONSOLIDATED WORKFLOW
+=====================
+
+For Building and Running:
+  run.bat [build] [debug]
+
+  Build + Debug (default):
+    run.bat
+
+  Build + Release:
+    run.bat true false
+
+  Skip Build + Debug:
+    run.bat false true
+
+  Skip Build + Release:
+    run.bat false false
+
+For Monitoring Logs (use PowerShell/Terminal directly):
+  PowerShell: Get-Content logs\application-runtime.log -Wait
+  Git Bash:   tail -f logs/application-runtime.log
+
+For Testing (use JUnit):
+  mvn test -Dtest=PanchangaExtractionTest
+  mvn test (run all tests)
+
+Test file: src/test/java/com/sankalpam/service/impl/PanchangaExtractionTest.java
+  - 30+ unit tests
+  - Tests for Maasam, Ruthuvu, Vaaram extraction
+  - Integration and edge case tests
+
+BENEFITS OF CONSOLIDATION
+==========================
+
+✅ Cleaner project structure (no clutter in root)
+✅ Single entry point for all operations (run.bat)
+✅ Easier to maintain
+✅ Clear parameter-based options
+✅ Consistent with Maven best practices
+✅ Proper unit testing framework (JUnit)
+✅ Native PowerShell for log monitoring
+✅ Essential quick reference files retained
+✅ Better separation of concerns
+✅ Reduced cognitive load
+
+FINAL STATISTICS
+================
+
+Before Consolidation:
+  - 12 .bat files in root
+  - 6 .ps1 files in root
+  - 15 .txt files in root
+  - Total: 33 utility files
+
+After Consolidation:
+  - 1 .bat file in root (run.bat)
+  - 0 .ps1 files in root
+  - 4 .txt files in root (essential only)
+  - Total: 5 files in root
+
+  Archived: 30 files in archive/bat-files/
+
+Reduction: 85% fewer files in root directory!
+
+DOCUMENTATION
+==============
+
+See: archive/bat-files/README.md
+  - Complete migration guide
+  - Detailed replacement information
+  - Safe deletion instructions
+
+Date Consolidated: 2026-02-27
+

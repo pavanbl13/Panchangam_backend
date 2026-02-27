@@ -1,0 +1,15 @@
+{
+  "Chaitramu": {"range": "15/03-14/04", "months": [3, 4]},
+  "Vaisakhamu": {"range": "15/04-14/05", "months": [4, 5]},
+  "Jyeshthamu": {"range": "15/05-14/06", "months": [5, 6]},
+  "Ashadhamu": {"range": "15/06-14/07", "months": [6, 7]},
+  "Sravanamu": {"range": "15/07-14/08", "months": [7, 8]},
+  "Bhadrapadamu": {"range": "15/08-14/09", "months": [8, 9]},
+  "Ashwayujamu": {"range": "15/09-14/10", "months": [9, 10]},
+  "Karthikamu": {"range": "15/10-14/11", "months": [10, 11]},
+  "Margasiramu": {"range": "15/11-14/12", "months": [11, 12]},
+  "Pushyamu": {"range": "15/12-14/01", "months": [12, 1]},
+  "Maghamu": {"range": "15/01-14/02", "months": [1, 2]},
+  "Phalgunamu": {"range": "15/02-14/03", "months": [2, 3]}
+}
+
