@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  sankalpam-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sankalpam-api
+    ports:
+      - "8081:8081"
+    environment:
+      # Pass your Google API key here
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY:-your-api-key-here}
+      JAVA_OPTS: "-Xmx512m -Xms256m"
+      SPRING_PROFILES_ACTIVE: "dev"
+
+      # CORS Configuration (adjust as needed)
+      # APP_CORS_ALLOWED_ORIGINS: "http://localhost:5173,http://localhost:4173"
+
+    volumes:
+      # Mount logs directory for persistence
+      - ./logs:/app/logs
+
+    networks:
+      - sankalpam-network
+
+    # Restart policy
+    restart: unless-stopped
+
+    # Health check
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+networks:
+  sankalpam-network:
+    driver: bridge
+

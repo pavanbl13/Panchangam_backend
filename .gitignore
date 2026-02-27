@@ -86,3 +86,9 @@ Thumbs.db
 GENERATED_MAPPINGS.txt
 extract_excel_output.txt
 
+# Environment variables and sensitive configs
+.env
+.env.local
+application-dev.yml
+application-local.yml
+

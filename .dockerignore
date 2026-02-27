@@ -1,0 +1,46 @@
+﻿# Git
+.git
+.gitignore
+.gitattributes
+# IDE
+.idea
+.vscode
+.classpath
+.project
+.settings
+*.iml
+*.swp
+*.swo
+*~
+# Build artifacts
+target
+build
+.maven
+.gradle
+# Logs
+logs
+*.log
+# OS
+.DS_Store
+Thumbs.db
+# Archive
+archive
+# Documentation (not needed in runtime)
+*.md
+docs
+postman
+QUICK_START.txt
+GITHUB_SETUP.txt
+README_GITHUB.txt
+BAT_FILES_CONSOLIDATED.txt
+SETUP_GUIDE.txt
+API_DOCUMENTATION.md
+# Batch and shell scripts (not needed in container)
+*.bat
+*.ps1
+# Environment files
+.env
+.env.local
+.env.*.local
+# Node modules (if any frontend)
+node_modules

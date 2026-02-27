@@ -50,4 +50,4 @@ logging:
 
 google:
   api:
-    key: AIzaSyBq4oT-gLWACrC8J76ToCwXRpYKzKIlvag
+    key: ${GOOGLE_API_KEY:}
