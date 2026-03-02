@@ -10,6 +10,22 @@ public final class SankalpamData {
 
     private SankalpamData() {}
 
+    public static final List<String> CITIES = List.of(
+        "New York", "Los Angeles", "San Francisco", "San Jose", "San Antonio",
+        "San Diego", "Chicago", "Houston", "Phoenix", "Philadelphia",
+        "Dallas", "Austin", "Denver", "Seattle", "Boston",
+        "Miami", "Atlanta", "Detroit", "Las Vegas", "Portland",
+        "London", "Paris", "Berlin", "Madrid", "Rome",
+        "Amsterdam", "Barcelona", "Vienna", "Prague", "Budapest",
+        "Tokyo", "Shanghai", "Delhi", "Mumbai", "Beijing",
+        "Bangalore", "Hyderabad", "Pune", "Kolkata", "Chennai",
+        "Ahmedabad", "Jaipur", "Lucknow", "Chandigarh", "Indore",
+        "Bangkok", "Singapore", "Hong Kong", "Seoul", "Jakarta",
+        "Sydney", "Melbourne", "Auckland", "Toronto", "Mexico City",
+        "São Paulo", "Buenos Aires", "Cape Town", "Cairo", "Dubai",
+        "Istanbul", "Athens", "Moscow", "St. Petersburg", "Warsaw"
+    );
+
     public static final List<String> SAMVATSARAMS = List.of(
         "Prabhava", "Vibhava", "Shukla", "Pramodoota", "Prajotpathi",
         "Aangirasa", "Shrimukha", "Bhava", "Yuva", "Dhaatu",

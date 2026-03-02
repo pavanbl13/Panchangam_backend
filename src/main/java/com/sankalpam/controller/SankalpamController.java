@@ -7,6 +7,7 @@ import com.sankalpam.model.Sankalpam;
 import com.sankalpam.model.SankalpamFinder;
 import com.sankalpam.model.SankalpamPanchangaResponse;
 import com.sankalpam.service.SankalpamService;
+import com.sankalpam.service.CitySearchService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * REST Controller for Sankalpam operations.
@@ -25,7 +28,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/sankalpam")
 @CrossOrigin(
-    origins  = {"http://localhost:5173", "http://localhost:4173"},
+    origins  = {"http://localhost:5173", "http://localhost:4173", "https://panchangam-frontend.onrender.com"},
     methods  = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS},
     allowedHeaders = "*"
 )
@@ -33,52 +36,8 @@ import java.util.Map;
 public class SankalpamController {
 
     private final SankalpamService sankalpamService;
+    private final CitySearchService citySearchService;
 
-
-    /**
-     * GET /api/v1/sankalpam/metadata
-     * Returns dropdown options for the Panchanga calendar fields.
-     * NOTE: Uses HashMap instead of Map.of() to allow >10 entries reliably.
-     */
-    @GetMapping("/metadata")
-    public ResponseEntity<ApiResponse<Map<String, Object>>> getMetadata() {
-        Map<String, Object> metadata = new HashMap<>();
-        metadata.put("samvatsarams", SankalpamData.SAMVATSARAMS);
-        metadata.put("ayanams", SankalpamData.AYANAMS);
-        metadata.put("ruthus", SankalpamData.RUTHUS);
-        metadata.put("masams", SankalpamData.MASAMS);
-        metadata.put("pakshams", SankalpamData.PAKSHAMS);
-        metadata.put("tithis", SankalpamData.TITHIS);
-        metadata.put("vaasarams", SankalpamData.VAASARAMS);
-        metadata.put("nakshatrams", SankalpamData.NAKSHATRAMS);
-        metadata.put("rasis", SankalpamData.RASIS);
-
-        ApiResponse<Map<String, Object>> response = new ApiResponse<>(true,"success", metadata, null);
-        return ResponseEntity.ok(response);
-    }
-
-    /**
-     * POST /api/v1/sankalpam/submit
-     * Accepts and validates a Sankalpam form submission.
-     */
-    @PostMapping("/submit")
-    public ResponseEntity<ApiResponse<Map<String, String>>> submit(
-            @Valid @RequestBody SankalpamRequest request) {
-
-        Sankalpam saved = sankalpamService.submit(request);
-
-        Map<String, String> responseData = new HashMap<>();
-        responseData.put("referenceId",  saved.getId());
-        responseData.put("submittedFor", saved.getFullName());
-        responseData.put("submittedAt",  saved.getSubmittedAt().toString());
-
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(ApiResponse.ok(
-                    "Sankalpam submitted successfully. May this sankalpa be fulfilled.",
-                    responseData
-                ));
-    }
 
     /**
      * POST /api/v1/sankalpam/find
@@ -110,5 +69,19 @@ public class SankalpamController {
                     "Sankalpam found successfully for the given date, time, and location.",
                     panchanga
                 ));
+    }
+
+    /**
+     * GET /api/v1/sankalpam/cities?q=<searchTerm>
+     * Searches for cities using Geoapify Autocomplete API.
+     * Returns a list of matching city names.
+     */
+    @GetMapping("/cities")
+    public ResponseEntity<List<String>> searchCities(
+            @RequestParam(value = "q", defaultValue = "") String searchTerm) {
+
+        List<String> matchingCities = citySearchService.searchCities(searchTerm);
+
+        return ResponseEntity.ok(matchingCities);
     }
 }

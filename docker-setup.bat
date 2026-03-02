@@ -27,34 +27,34 @@ if "%choice%"=="7" goto end
 goto menu
 :build_debug
 echo.
-set /p GOOGLE_API_KEY="Enter GOOGLE_API_KEY (get from https://console.cloud.google.com): "
-if "!GOOGLE_API_KEY!"=="" (echo API key cannot be empty & pause & goto menu)
+set /p GEOSEARCH_API_KEY="Enter GEOSEARCH_API_KEY (get from https://myprojects.geoapify.com): "
+if "!GEOSEARCH_API_KEY!"=="" (echo API key cannot be empty & pause & goto menu)
 docker build -t sankalpam-api:latest .
 docker stop sankalpam-api >nul 2>&1
 docker rm sankalpam-api >nul 2>&1
 echo.
 echo Starting in DEBUG mode - Press Ctrl+C to stop
-docker run -it --name sankalpam-api -p 8081:8081 -e GOOGLE_API_KEY=!GOOGLE_API_KEY! -v "%cd%\logs:/app/logs" sankalpam-api:latest
+docker run -it --name sankalpam-api -p 8081:8081 -e GEOSEARCH_API_KEY=!GEOSEARCH_API_KEY! -v "%cd%\logs:/app/logs" sankalpam-api:latest
 goto menu
 :build_release
 echo.
-set /p GOOGLE_API_KEY="Enter GOOGLE_API_KEY (get from https://console.cloud.google.com): "
-if "!GOOGLE_API_KEY!"=="" (echo API key cannot be empty & pause & goto menu)
+set /p GEOSEARCH_API_KEY="Enter GEOSEARCH_API_KEY (get from https://myprojects.geoapify.com): "
+if "!GEOSEARCH_API_KEY!"=="" (echo API key cannot be empty & pause & goto menu)
 echo Building image (this may take 10-15 minutes)...
 docker build -t sankalpam-api:latest . >nul 2>&1
 docker stop sankalpam-api >nul 2>&1
 docker rm sankalpam-api >nul 2>&1
 echo Starting container in background...
-docker run -d --name sankalpam-api -p 8081:8081 -e GOOGLE_API_KEY=!GOOGLE_API_KEY! -v "%cd%\logs:/app/logs" --restart unless-stopped sankalpam-api:latest
+docker run -d --name sankalpam-api -p 8081:8081 -e GEOSEARCH_API_KEY=!GEOSEARCH_API_KEY! -v "%cd%\logs:/app/logs" --restart unless-stopped sankalpam-api:latest
 echo Container started. API: http://localhost:8081
 pause & goto menu
 :run_debug
 echo.
-set /p GOOGLE_API_KEY="Enter GOOGLE_API_KEY: "
-if "!GOOGLE_API_KEY!"=="" (echo API key cannot be empty & pause & goto menu)
+set /p GEOSEARCH_API_KEY="Enter GEOSEARCH_API_KEY: "
+if "!GEOSEARCH_API_KEY!"=="" (echo API key cannot be empty & pause & goto menu)
 docker stop sankalpam-api >nul 2>&1
 docker rm sankalpam-api >nul 2>&1
-docker run -it --name sankalpam-api -p 8081:8081 -e GOOGLE_API_KEY=!GOOGLE_API_KEY! -v "%cd%\logs:/app/logs" sankalpam-api:latest
+docker run -it --name sankalpam-api -p 8081:8081 -e GEOSEARCH_API_KEY=!GEOSEARCH_API_KEY! -v "%cd%\logs:/app/logs" sankalpam-api:latest
 goto menu
 :logs
 docker logs -f sankalpam-api

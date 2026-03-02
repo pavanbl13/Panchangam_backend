@@ -2,13 +2,13 @@ package com.sankalpam.service.impl;
 
 import com.sankalpam.dto.SankalpamRequest;
 import com.sankalpam.dto.SankalpamFinderRequest;
+import com.sankalpam.model.CityGeoInfo;
 import com.sankalpam.model.Coordinates;
 import com.sankalpam.model.Sankalpam;
 import com.sankalpam.model.SankalpamFinder;
 import com.sankalpam.service.GeoLocationService;
 import com.sankalpam.service.SankalpamApiClient;
 import com.sankalpam.service.SankalpamService;
-import com.sankalpam.service.TimeZoneService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -21,16 +21,13 @@ import org.springframework.stereotype.Service;
 public class SankalpamServiceImpl implements SankalpamService {
 
     private final GeoLocationService geoService;
-    private final TimeZoneService tzService;
     private final SankalpamApiClient apiClient;
 
     public SankalpamServiceImpl(
             GeoLocationService geoService,
-            TimeZoneService tzService,
             SankalpamApiClient apiClient
     ) {
         this.geoService = geoService;
-        this.tzService = tzService;
         this.apiClient = apiClient;
     }
 
@@ -100,8 +97,10 @@ public class SankalpamServiceImpl implements SankalpamService {
     @Override
     public SankalpamFinder findSankalpam(SankalpamFinderRequest request) {
         String city = request.getCity().trim();
-        Coordinates coords = geoService.getCoordinates(city);
-        String timezone = tzService.getTimeZone(coords);
+        // Single call to get lat, lng, and timezone from cache or Geoapify API
+        CityGeoInfo geoInfo = geoService.getGeoInfo(city);
+        Coordinates coords = geoInfo.toCoordinates();
+        String timezone = geoInfo.getTimezone();
         return apiClient.fetchSankalpam(city, coords, timezone, request.getDate(), request.getTime());
     }
 

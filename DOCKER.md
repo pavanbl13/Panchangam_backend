@@ -1,4 +1,4 @@
-# Docker Deployment Guide - Sankalpam API
+﻿# Docker Deployment Guide - Sankalpam API
 
 Complete documentation for building, deploying, and maintaining the Sankalpam API using Docker.
 
@@ -25,20 +25,20 @@ Complete documentation for building, deploying, and maintaining the Sankalpam AP
 ### Windows Batch Script (Easiest)
 ```cmd
 cd C:\Family\Pavan\AI\Panchangam\sankalpam-project\backend
-set GOOGLE_API_KEY=your-actual-api-key-here
+set GEOSEARCH_API_KEY=your-actual-api-key-here
 docker-build-run.bat
 ```
 
 ### PowerShell Script
 ```powershell
-$env:GOOGLE_API_KEY="your-actual-api-key-here"
+$env:GEOSEARCH_API_KEY="your-actual-api-key-here"
 .\docker-manage.ps1 -Command build
 .\docker-manage.ps1 -Command run -Mode debug
 ```
 
 ### Docker Compose (Simple)
 ```cmd
-set GOOGLE_API_KEY=your-actual-api-key-here
+set GEOSEARCH_API_KEY=your-actual-api-key-here
 docker-compose up --build
 ```
 
@@ -52,7 +52,7 @@ docker-compose up --build
   - Minimum version: 20.10+
 - **Docker Compose** (usually included with Docker Desktop)
 - **At least 2GB free disk space** for image
-- **Google Geolocation API Key** from https://console.cloud.google.com
+- **Geoapify API Key** from https://myprojects.geoapify.com
 
 ### Verify Installation
 ```cmd
@@ -65,24 +65,24 @@ docker run hello-world
 
 ## Setup Instructions
 
-### 1. Set Google API Key
+### 1. Set Geoapify API Key
 
 #### Windows Command Prompt
 ```cmd
-set GOOGLE_API_KEY=your-actual-api-key-here
-echo %GOOGLE_API_KEY%
+set GEOSEARCH_API_KEY=your-actual-api-key-here
+echo %GEOSEARCH_API_KEY%
 ```
 
 #### Windows PowerShell
 ```powershell
-$env:GOOGLE_API_KEY="your-actual-api-key-here"
-echo $env:GOOGLE_API_KEY
+$env:GEOSEARCH_API_KEY="your-actual-api-key-here"
+echo $env:GEOSEARCH_API_KEY
 ```
 
 #### Linux/Mac
 ```bash
-export GOOGLE_API_KEY="your-actual-api-key-here"
-echo $GOOGLE_API_KEY
+export GEOSEARCH_API_KEY="your-actual-api-key-here"
+echo $GEOSEARCH_API_KEY
 ```
 
 ### 2. Navigate to Project
@@ -169,7 +169,7 @@ Successfully tagged sankalpam-api:latest
 docker run -it ^
     --name sankalpam-api ^
     -p 8081:8081 ^
-    -e GOOGLE_API_KEY=%GOOGLE_API_KEY% ^
+    -e GEOSEARCH_API_KEY=%GEOSEARCH_API_KEY% ^
     -v %cd%\logs:/app/logs ^
     sankalpam-api:latest
 ```
@@ -181,7 +181,7 @@ Press Ctrl+C to stop.
 docker run -d ^
     --name sankalpam-api ^
     -p 8081:8081 ^
-    -e GOOGLE_API_KEY=%GOOGLE_API_KEY% ^
+    -e GEOSEARCH_API_KEY=%GEOSEARCH_API_KEY% ^
     -v %cd%\logs:/app/logs ^
     --restart unless-stopped ^
     sankalpam-api:latest
@@ -218,7 +218,7 @@ Expected:
 
 ### Quick Start
 ```cmd
-set GOOGLE_API_KEY=your-api-key
+set GEOSEARCH_API_KEY=your-api-key
 docker-compose up --build
 ```
 
@@ -257,7 +257,7 @@ docker-compose exec container cmd  (Run command in container)
 ### Verification Checklist
 
 - [ ] Docker is installed and running
-- [ ] Google API Key is set
+- [ ] Geoapify API Key is set
 - [ ] Image built successfully
 - [ ] Container starts without errors
 - [ ] API endpoint responds
@@ -278,11 +278,11 @@ docker build -t sankalpam-api:latest .
 
 ### Step 3: Run Container
 ```cmd
-set GOOGLE_API_KEY=your-api-key
+set GEOSEARCH_API_KEY=your-api-key
 docker run -it ^
     --name sankalpam-api ^
     -p 8081:8081 ^
-    -e GOOGLE_API_KEY=%GOOGLE_API_KEY% ^
+    -e GEOSEARCH_API_KEY=%GEOSEARCH_API_KEY% ^
     -v %cd%\logs:/app/logs ^
     sankalpam-api:latest
 ```
@@ -384,7 +384,7 @@ Invoke-RestMethod -Uri "http://localhost:8081/api/find" `
 
 ### Method 1: GitHub Integration (Recommended - Automatic)
 
-1. **Ensure Dockerfile is in repository root** ✓
+1. **Ensure Dockerfile is in repository root** âœ“
 2. **Push code to GitHub:**
    ```cmd
    git add .
@@ -393,7 +393,7 @@ Invoke-RestMethod -Uri "http://localhost:8081/api/find" `
    ```
 
 3. **On Render Dashboard:**
-   - Click "New +" → "Web Service"
+   - Click "New +" â†’ "Web Service"
    - Connect GitHub repository
    - Render auto-detects Dockerfile
    - Configure settings:
@@ -401,7 +401,7 @@ Invoke-RestMethod -Uri "http://localhost:8081/api/find" `
      - **Runtime:** Docker
      - **Region:** Choose nearest region
    - Add Environment Variable:
-     - **Key:** `GOOGLE_API_KEY`
+     - **Key:** `GEOSEARCH_API_KEY`
      - **Value:** Your actual API key
    - Click "Create Web Service"
 
@@ -428,7 +428,7 @@ Invoke-RestMethod -Uri "http://localhost:8081/api/find" `
    ```
 
 2. **On Render Dashboard:**
-   - Click "New +" → "Web Service"
+   - Click "New +" â†’ "Web Service"
    - Select "Docker" as source
    - Enter image URL: `yourusername/sankalpam-api:latest`
    - Configure environment and deploy
@@ -466,10 +466,10 @@ docker images | findstr sankalpam-api               (List images)
 ### Run Commands
 ```cmd
 REM Debug mode
-docker run -it -p 8081:8081 -e GOOGLE_API_KEY=%GOOGLE_API_KEY% sankalpam-api:latest
+docker run -it -p 8081:8081 -e GEOSEARCH_API_KEY=%GEOSEARCH_API_KEY% sankalpam-api:latest
 
 REM Release mode
-docker run -d -p 8081:8081 -e GOOGLE_API_KEY=%GOOGLE_API_KEY% sankalpam-api:latest
+docker run -d -p 8081:8081 -e GEOSEARCH_API_KEY=%GEOSEARCH_API_KEY% sankalpam-api:latest
 ```
 
 ### Container Management
@@ -550,20 +550,20 @@ docker stop sankalpam-api
 docker rm sankalpam-api
 ```
 
-### Google API key not working
+### Geoapify API Key not working
 **Problem:** "Failed to fetch coordinates" error
 **Solution:**
 ```cmd
 REM Verify key is set
-echo %GOOGLE_API_KEY%
+echo %GEOSEARCH_API_KEY%
 
 REM Verify key is passed to container
-docker inspect sankalpam-api | findstr GOOGLE_API_KEY
+docker inspect sankalpam-api | findstr GEOSEARCH_API_KEY
 
 REM Restart with correct key
 docker stop sankalpam-api
 docker rm sankalpam-api
-docker run -e GOOGLE_API_KEY=your-key sankalpam-api:latest
+docker run -e GEOSEARCH_API_KEY=your-key sankalpam-api:latest
 ```
 
 ### Image not found
@@ -633,10 +633,10 @@ docker build --no-cache -t sankalpam-api:latest .
 ## Environment Variables
 
 ### Required
-- `GOOGLE_API_KEY` - Google Geolocation API Key (from Google Cloud Console)
+- `GEOSEARCH_API_KEY` - Geoapify API Key (from Google Cloud Console)
   - **Security:** Must be passed at runtime via `-e` flag, NEVER in Dockerfile
   - **Why:** Secrets baked into images are visible to anyone with access to the image
-  - **How:** `docker run -e GOOGLE_API_KEY=your-key ...`
+  - **How:** `docker run -e GEOSEARCH_API_KEY=your-key ...`
 
 ### Optional
 - `JAVA_OPTS` - JVM options (default: `-Xmx512m -Xms256m`)
@@ -647,16 +647,16 @@ docker build --no-cache -t sankalpam-api:latest .
 
 1. **Never hardcode secrets in Dockerfile**
    ```dockerfile
-   # ❌ BAD - Exposes secret in image
-   ENV GOOGLE_API_KEY=secret-key-12345
+   # âŒ BAD - Exposes secret in image
+   ENV GEOSEARCH_API_KEY=secret-key-12345
    
-   # ✅ GOOD - Pass at runtime
-   # Note: GOOGLE_API_KEY must be passed at runtime via -e flag
+   # âœ… GOOD - Pass at runtime
+   # Note: GEOSEARCH_API_KEY must be passed at runtime via -e flag
    ```
 
 2. **Pass secrets at runtime**
    ```cmd
-   docker run -e GOOGLE_API_KEY=%GOOGLE_API_KEY% sankalpam-api:latest
+   docker run -e GEOSEARCH_API_KEY=%GEOSEARCH_API_KEY% sankalpam-api:latest
    ```
 
 3. **Use secure secret management for production**
@@ -668,12 +668,12 @@ docker build --no-cache -t sankalpam-api:latest .
 ### Example Usage (SECURE)
 ```cmd
 REM Set in environment first
-set GOOGLE_API_KEY=your-key
+set GEOSEARCH_API_KEY=your-key
 
 REM Pass to container (key is NOT in image)
 docker run -d ^
     -p 8081:8081 ^
-    -e GOOGLE_API_KEY=%GOOGLE_API_KEY% ^
+    -e GEOSEARCH_API_KEY=%GEOSEARCH_API_KEY% ^
     -e JAVA_OPTS="-Xmx1g -Xms512m -XX:+UseG1GC" ^
     -e SPRING_PROFILES_ACTIVE=prod ^
     sankalpam-api:latest
@@ -686,13 +686,13 @@ services:
   sankalpam-api:
     image: sankalpam-api:latest
     environment:
-      GOOGLE_API_KEY: ${GOOGLE_API_KEY}  # Loaded from system env var
+      GEOSEARCH_API_KEY: ${GEOSEARCH_API_KEY}  # Loaded from system env var
       JAVA_OPTS: "-Xmx1g -Xms512m"
 ```
 
 Then pass the key:
 ```cmd
-set GOOGLE_API_KEY=your-key
+set GEOSEARCH_API_KEY=your-key
 docker-compose up
 ```
 
@@ -763,20 +763,20 @@ REM Size: ~120MB (65% smaller)
 
 ## Summary
 
-✅ **Docker implementation is COMPLETE and READY**
+âœ… **Docker implementation is COMPLETE and READY**
 
 You now have:
-- ✓ Production-ready Dockerfiles (standard + Alpine)
-- ✓ Docker Compose configuration
-- ✓ Windows automation scripts (batch + PowerShell)
-- ✓ Comprehensive testing procedures
-- ✓ Cloud deployment instructions
-- ✓ Performance optimization guidelines
-- ✓ Complete troubleshooting guide
+- âœ“ Production-ready Dockerfiles (standard + Alpine)
+- âœ“ Docker Compose configuration
+- âœ“ Windows automation scripts (batch + PowerShell)
+- âœ“ Comprehensive testing procedures
+- âœ“ Cloud deployment instructions
+- âœ“ Performance optimization guidelines
+- âœ“ Complete troubleshooting guide
 
 ### Next Steps:
 1. Read Quick Start section above
-2. Set GOOGLE_API_KEY environment variable
+2. Set GEOSEARCH_API_KEY environment variable
 3. Run `docker-build-run.bat` or `docker-compose up --build`
 4. Test with API endpoints
 5. Deploy to Render.com (optional)
@@ -784,5 +784,6 @@ You now have:
 ---
 
 **Last Updated:** February 27, 2026
-**Status:** ✅ COMPLETE AND READY FOR DEPLOYMENT
+**Status:** âœ… COMPLETE AND READY FOR DEPLOYMENT
+
 

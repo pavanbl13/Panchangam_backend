@@ -9,8 +9,8 @@ services:
     ports:
       - "8081:8081"
     environment:
-      # Pass your Google API key here
-      GOOGLE_API_KEY: ${GOOGLE_API_KEY:-your-api-key-here}
+      # Pass your Geoapify API key here
+      GEOSEARCH_API_KEY: ${GEOSEARCH_API_KEY:-your-api-key-here}
       JAVA_OPTS: "-Xmx512m -Xms256m"
       SPRING_PROFILES_ACTIVE: "dev"
 

@@ -7,17 +7,17 @@
 
 ## Environment Variables Setup
 
-### Google API Key
-Before running the application, set the Google API key as an environment variable:
+### Geoapify API Key
+Before running the application, set the Geoapify API key as an environment variable:
 
 **PowerShell:**
 ```powershell
-$env:GOOGLE_API_KEY = "your_actual_google_api_key_here"
+$env:GEOSEARCH_API_KEY = "your_geoapify_api_key_here"
 ```
 
 **Command Prompt (CMD):**
 ```cmd
-set GOOGLE_API_KEY=your_actual_google_api_key_here
+set GEOSEARCH_API_KEY=your_geoapify_api_key_here
 ```
 
 **Permanent (Windows):**
@@ -25,9 +25,14 @@ set GOOGLE_API_KEY=your_actual_google_api_key_here
 2. Click "Advanced system settings"
 3. Click "Environment Variables"
 4. Click "New" under User variables
-5. Variable name: `GOOGLE_API_KEY`
-6. Variable value: `your_actual_google_api_key_here`
+5. Variable name: `GEOSEARCH_API_KEY`
+6. Variable value: `your_geoapify_api_key_here`
 7. Click OK and restart applications
+
+**Get your API key:**
+1. Go to https://myprojects.geoapify.com/
+2. Create a new project
+3. Copy the API key
 
 ## Building and Running
 
@@ -91,7 +96,7 @@ Application logs are written to:
 
 - **Never commit API keys** to the repository
 - Always use environment variables for sensitive credentials
-- The `application.yml` file is configured to read from `${GOOGLE_API_KEY}` environment variable
+- The `application.yml` file is configured to read from `${GEOSEARCH_API_KEY}` environment variable
 - Additional environment-specific configs can be added to `.gitignore` for local development
 
 ## Troubleshooting
@@ -103,7 +108,7 @@ netstat -ano | findstr :8081
 Kill the process using the port or change the port in `application.yml`
 
 ### API Key not found error
-Ensure the `GOOGLE_API_KEY` environment variable is set before starting the application.
+Ensure the `GEOSEARCH_API_KEY` environment variable is set before starting the application.
 
 ### Build failures
 Clear Maven cache:
@@ -132,4 +137,3 @@ backend/
 ├── run.bat                 (Build & run batch file)
 └── docs/                   (Documentation)
 ```
-

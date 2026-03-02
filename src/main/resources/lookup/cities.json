@@ -1,0 +1,32 @@
+{
+  "hyderabad" : {
+    "latitude" : 17.385,
+    "longitude" : 78.4867,
+    "timezone" : "Asia/Kolkata",
+    "countryCode" : "in"
+  },
+  "mumbai" : {
+    "latitude" : 19.076,
+    "longitude" : 72.8777,
+    "timezone" : "Asia/Kolkata",
+    "countryCode" : "in"
+  },
+  "new york" : {
+    "latitude" : 40.7128,
+    "longitude" : -74.006,
+    "timezone" : "America/New_York",
+    "countryCode" : "us"
+  },
+  "pune" : {
+    "latitude" : 18.5204,
+    "longitude" : 73.8567,
+    "timezone" : "Asia/Kolkata",
+    "countryCode" : "in"
+  },
+  "sydney" : {
+    "latitude" : -33.8688,
+    "longitude" : 151.2093,
+    "timezone" : "Australia/Sydney",
+    "countryCode" : "au"
+  }
+}
