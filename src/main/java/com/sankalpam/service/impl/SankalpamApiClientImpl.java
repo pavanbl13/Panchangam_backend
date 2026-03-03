@@ -260,6 +260,48 @@ public class SankalpamApiClientImpl implements SankalpamApiClient {
      * Each Maasam has a date range like "15/02-14/03" (Phalgunamu)
      * If the date falls within that range, return that Maasam name
      */
+    /**
+     * O(1) Maasam lookup using precomputed maps.
+     *
+     * Every Maasam spans from the 15th of one month to the 14th of the next:
+     *   day >= 15  →  look up by start-month
+     *   day <= 14  →  look up by end-month
+     *
+     * The two maps are built lazily (once) from the JSON data.
+     */
+    private volatile java.util.Map<Integer, String> maasamByStartMonth;
+    private volatile java.util.Map<Integer, String> maasamByEndMonth;
+
+    private void ensureMaasamLookupMaps() {
+        if (maasamByStartMonth != null) return;
+
+        synchronized (this) {
+            if (maasamByStartMonth != null) return;
+
+            java.util.Map<Integer, String> byStart = new java.util.HashMap<>();
+            java.util.Map<Integer, String> byEnd   = new java.util.HashMap<>();
+
+            java.util.Map<String, java.util.Map<String, Object>> maasamMap =
+                    mappingService.getAllMaasamMappings();
+
+            for (var entry : maasamMap.entrySet()) {
+                String name  = entry.getKey();
+                String range = (String) entry.getValue().get("range");
+                // range format: "15/03-14/04"
+                String[] parts      = range.split("-");
+                int startMonth = Integer.parseInt(parts[0].split("/")[1]);
+                int endMonth   = Integer.parseInt(parts[1].split("/")[1]);
+
+                byStart.put(startMonth, name);
+                byEnd.put(endMonth, name);
+            }
+
+            maasamByEndMonth   = byEnd;
+            maasamByStartMonth = byStart;
+            log.info("Maasam O(1) lookup maps initialised — {} entries", byStart.size());
+        }
+    }
+
     String extractMaasamFromDateRange(String dateStr) {
         try {
             if (dateStr == null || dateStr.isEmpty()) {
@@ -267,128 +309,42 @@ public class SankalpamApiClientImpl implements SankalpamApiClient {
                 return null;
             }
 
-            int month = 0;
-            int day = 0;
+            int month;
+            int day;
 
             // Handle both YYYY-MM-DD and MM/DD/YYYY formats
             if (dateStr.contains("-")) {
-                // Format: YYYY-MM-DD
-                String[] dateParts = dateStr.split("-");
-                if (dateParts.length < 3) {
-                    log.warn("Invalid date format: {}", dateStr);
-                    return null;
-                }
-                month = Integer.parseInt(dateParts[1]);
-                day = Integer.parseInt(dateParts[2]);
+                String[] p = dateStr.split("-");
+                if (p.length < 3) { log.warn("Invalid date format: {}", dateStr); return null; }
+                month = Integer.parseInt(p[1]);
+                day   = Integer.parseInt(p[2]);
             } else if (dateStr.contains("/")) {
-                // Format: MM/DD/YYYY
-                String[] dateParts = dateStr.split("/");
-                if (dateParts.length < 2) {
-                    log.warn("Invalid date format: {}", dateStr);
-                    return null;
-                }
-                month = Integer.parseInt(dateParts[0]);
-                day = Integer.parseInt(dateParts[1]);
+                String[] p = dateStr.split("/");
+                if (p.length < 2) { log.warn("Invalid date format: {}", dateStr); return null; }
+                month = Integer.parseInt(p[0]);
+                day   = Integer.parseInt(p[1]);
             } else {
                 log.warn("Unsupported date format: {}", dateStr);
                 return null;
             }
 
-            log.debug("Extracting Maasam for date: month={}, day={}", month, day);
+            ensureMaasamLookupMaps();
 
-            // Get the Maasam mapping from JSON
-            java.util.Map<String, java.util.Map<String, Object>> maasamMap =
-                mappingService.getAllMaasamMappings();
+            // Direct O(1) lookup — no iteration needed
+            String maasam = (day >= 15)
+                    ? maasamByStartMonth.get(month)
+                    : maasamByEndMonth.get(month);
 
-            // Check each Maasam's date range
-            for (java.util.Map.Entry<String, java.util.Map<String, Object>> entry : maasamMap.entrySet()) {
-                String maasamName = entry.getKey();
-                java.util.Map<String, Object> maasamData = entry.getValue();
-
-                @SuppressWarnings("unchecked")
-                java.util.List<Integer> months = (java.util.List<Integer>) maasamData.get("months");
-                String range = (String) maasamData.get("range");
-
-                if (months == null || months.isEmpty()) {
-                    continue;
-                }
-
-                // Check if date falls in the Maasam range
-                if (isDateInMaasamRange(month, day, range, months)) {
-                    log.info("Matched Maasam: {} for date: {}, range: {}", maasamName, dateStr, range);
-                    return maasamName;
-                }
+            if (maasam != null) {
+                log.info("Matched Maasam: {} for date: {} (month={}, day={})", maasam, dateStr, month, day);
+            } else {
+                log.warn("No matching Maasam found for date: {}", dateStr);
             }
-
-            log.warn("No matching Maasam found for date: {}", dateStr);
-            return null;
+            return maasam;
 
         } catch (Exception e) {
             log.error("Exception occurred while extracting Maasam from date range: {}", dateStr, e);
             return null;
-        }
-    }
-
-    /**
-     * Check if the given date falls within the Maasam's date range
-     * Range format: "15/02-14/03" means 15th Feb to 14th Mar
-     *
-     * Special handling for ranges that cross year boundary like "15/12-14/01"
-     * (December 15 to January 14 of next year)
-     */
-    boolean isDateInMaasamRange(int month, int day, String range, java.util.List<Integer> monthsList) {
-        try {
-            // Parse range like "15/02-14/03"
-            String[] parts = range.split("-");
-            if (parts.length != 2) {
-                return false;
-            }
-
-            String[] startParts = parts[0].split("/");
-            String[] endParts = parts[1].split("/");
-
-            if (startParts.length < 2 || endParts.length < 2) {
-                return false;
-            }
-
-            int startDay = Integer.parseInt(startParts[0]);
-            int startMonth = Integer.parseInt(startParts[1]);
-            int endDay = Integer.parseInt(endParts[0]);
-            int endMonth = Integer.parseInt(endParts[1]);
-
-            log.debug("Checking date {}/{} against range {}/{} to {}/{}",
-                month, day, startMonth, startDay, endMonth, endDay);
-
-            // Check if date falls within the range
-            if (startMonth <= endMonth) {
-                // Normal range (e.g., 02/15 - 03/14 for Phalgunamu)
-                if (month > startMonth && month < endMonth) {
-                    return true;
-                }
-                if (month == startMonth && day >= startDay) {
-                    return true;
-                }
-                if (month == endMonth && day <= endDay) {
-                    return true;
-                }
-            } else {
-                // Range crosses year boundary (e.g., 12/15 - 01/14 for Pushyamu)
-                if (month > startMonth || month < endMonth) {
-                    return true;
-                }
-                if (month == startMonth && day >= startDay) {
-                    return true;
-                }
-                if (month == endMonth && day <= endDay) {
-                    return true;
-                }
-            }
-
-            return false;
-
-        } catch (Exception e) {
-            log.error("Exception occurred while checking date in Maasam range", e);
-            return false;
         }
     }
 

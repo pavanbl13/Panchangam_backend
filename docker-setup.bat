@@ -1,9 +1,27 @@
 @echo off
 setlocal enabledelayedexpansion
 cls
+
+REM Read artifactId and version from pom.xml
+set IMAGE_NAME=
+set VERSION=
+set "_ART_COUNT=0"
+for /f "tokens=3 delims=<>" %%a in ('findstr "<artifactId>" pom.xml') do (
+    set /a _ART_COUNT+=1
+    if !_ART_COUNT! equ 2 set "IMAGE_NAME=%%a"
+)
+set "_VER_COUNT=0"
+for /f "tokens=3 delims=<>" %%a in ('findstr "<version>" pom.xml') do (
+    set /a _VER_COUNT+=1
+    if !_VER_COUNT! equ 2 set "VERSION=%%a"
+)
+if not defined IMAGE_NAME set "IMAGE_NAME=sankalpam-api"
+if not defined VERSION set "VERSION=latest"
+
 echo.
 echo ================================================================================
 echo                   SANKALPAM API - DOCKER SETUP (SIMPLE)
+echo                   Image: !IMAGE_NAME!:!VERSION!
 echo ================================================================================
 echo.
 :menu
@@ -29,42 +47,42 @@ goto menu
 echo.
 set /p GEOSEARCH_API_KEY="Enter GEOSEARCH_API_KEY (get from https://myprojects.geoapify.com): "
 if "!GEOSEARCH_API_KEY!"=="" (echo API key cannot be empty & pause & goto menu)
-docker build -t sankalpam-api:latest .
-docker stop sankalpam-api >nul 2>&1
-docker rm sankalpam-api >nul 2>&1
+docker build -t !IMAGE_NAME!:!VERSION! .
+docker stop !IMAGE_NAME! >nul 2>&1
+docker rm !IMAGE_NAME! >nul 2>&1
 echo.
 echo Starting in DEBUG mode - Press Ctrl+C to stop
-docker run -it --name sankalpam-api -p 8081:8081 -e GEOSEARCH_API_KEY=!GEOSEARCH_API_KEY! -v "%cd%\logs:/app/logs" sankalpam-api:latest
+docker run -it --name !IMAGE_NAME! -p 8081:8081 -e GEOSEARCH_API_KEY=!GEOSEARCH_API_KEY! -v "%cd%\logs:/app/logs" !IMAGE_NAME!:!VERSION!
 goto menu
 :build_release
 echo.
 set /p GEOSEARCH_API_KEY="Enter GEOSEARCH_API_KEY (get from https://myprojects.geoapify.com): "
 if "!GEOSEARCH_API_KEY!"=="" (echo API key cannot be empty & pause & goto menu)
 echo Building image (this may take 10-15 minutes)...
-docker build -t sankalpam-api:latest . >nul 2>&1
-docker stop sankalpam-api >nul 2>&1
-docker rm sankalpam-api >nul 2>&1
+docker build -t !IMAGE_NAME!:!VERSION! . >nul 2>&1
+docker stop !IMAGE_NAME! >nul 2>&1
+docker rm !IMAGE_NAME! >nul 2>&1
 echo Starting container in background...
-docker run -d --name sankalpam-api -p 8081:8081 -e GEOSEARCH_API_KEY=!GEOSEARCH_API_KEY! -v "%cd%\logs:/app/logs" --restart unless-stopped sankalpam-api:latest
+docker run -d --name !IMAGE_NAME! -p 8081:8081 -e GEOSEARCH_API_KEY=!GEOSEARCH_API_KEY! -v "%cd%\logs:/app/logs" --restart unless-stopped !IMAGE_NAME!:!VERSION!
 echo Container started. API: http://localhost:8081
 pause & goto menu
 :run_debug
 echo.
 set /p GEOSEARCH_API_KEY="Enter GEOSEARCH_API_KEY: "
 if "!GEOSEARCH_API_KEY!"=="" (echo API key cannot be empty & pause & goto menu)
-docker stop sankalpam-api >nul 2>&1
-docker rm sankalpam-api >nul 2>&1
-docker run -it --name sankalpam-api -p 8081:8081 -e GEOSEARCH_API_KEY=!GEOSEARCH_API_KEY! -v "%cd%\logs:/app/logs" sankalpam-api:latest
+docker stop !IMAGE_NAME! >nul 2>&1
+docker rm !IMAGE_NAME! >nul 2>&1
+docker run -it --name !IMAGE_NAME! -p 8081:8081 -e GEOSEARCH_API_KEY=!GEOSEARCH_API_KEY! -v "%cd%\logs:/app/logs" !IMAGE_NAME!:!VERSION!
 goto menu
 :logs
-docker logs -f sankalpam-api
+docker logs -f !IMAGE_NAME!
 goto menu
 :stop
-docker stop sankalpam-api
+docker stop !IMAGE_NAME!
 pause & goto menu
 :clean
 set /p confirm="Delete container and images? (yes/no): "
-if /i "%confirm%"=="yes" (docker stop sankalpam-api >nul 2>&1 & docker rm sankalpam-api >nul 2>&1 & docker rmi sankalpam-api:latest >nul 2>&1)
+if /i "%confirm%"=="yes" (docker stop !IMAGE_NAME! >nul 2>&1 & docker rm !IMAGE_NAME! >nul 2>&1 & docker rmi !IMAGE_NAME!:!VERSION! >nul 2>&1)
 pause & goto menu
 :end
 endlocal

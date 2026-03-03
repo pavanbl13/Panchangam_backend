@@ -1,6 +1,14 @@
 # Production Dockerfile with security and optimization best practices
 
-# Stage 1: Build Stage
+# Stage 1: Build React Frontend
+FROM node:20-alpine AS frontend-builder
+WORKDIR /frontend
+COPY src/main/frontend/package.json src/main/frontend/package-lock.json* ./
+RUN npm ci --production=false
+COPY src/main/frontend/ ./
+RUN npm run build
+
+# Stage 2: Build Spring Boot Backend
 FROM maven:3.9-eclipse-temurin-21 AS builder
 
 WORKDIR /app
@@ -12,10 +20,16 @@ RUN mvn dependency:go-offline -B
 # Copy source code
 COPY src ./src
 
-# Build the application with optimizations
-RUN mvn clean install -DskipTests -Ddockerfile.skip=true
+# Copy built frontend into static resources
+COPY --from=frontend-builder /frontend/dist ./src/main/resources/static/
 
-# Stage 2: Runtime Stage
+# Build the application with optimizations (skip frontend plugin since we already built it)
+RUN mvn clean install -DskipTests -Ddockerfile.skip=true -Dfrontend.skip=true
+# Capture the built JAR name for the runtime stage
+RUN JAR_FILE=$(ls /app/target/*.jar | grep -v original) && \
+    cp $JAR_FILE /app/target/app.jar
+
+# Stage 3: Runtime Stage
 FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /app
@@ -27,8 +41,8 @@ RUN apk add --no-cache curl
 RUN addgroup -g 1001 -S appuser && \
     adduser -u 1001 -S appuser -G appuser
 
-# Copy JAR from builder stage
-COPY --from=builder /app/target/sankalpam-api-1.0.0.jar .
+# Copy JAR from builder stage (renamed to app.jar to avoid version coupling)
+COPY --from=builder /app/target/app.jar .
 
 # Copy lookup data
 COPY --from=builder /app/src/main/resources/lookup ./src/main/resources/lookup
@@ -41,11 +55,11 @@ RUN mkdir -p /app/logs && \
 USER appuser
 
 # Expose port
-EXPOSE 8081
+EXPOSE 8000
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
-    CMD curl -f http://localhost:8081/actuator/health || exit 1
+    CMD curl -f http://localhost:8000/actuator/health || exit 1
 
 # JVM optimizations for container
 ENV JAVA_OPTS="-Xmx512m -Xms256m -XX:+UseG1GC -XX:MaxGCPauseMillis=200"
@@ -53,5 +67,5 @@ ENV SPRING_PROFILES_ACTIVE="prod"
 # Note: GEOSEARCH_API_KEY must be passed at runtime via -e flag, not in image
 
 # Run the application
-CMD ["sh", "-c", "java $JAVA_OPTS -jar sankalpam-api-1.0.0.jar"]
+CMD ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
 

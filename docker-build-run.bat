@@ -1,9 +1,36 @@
 @echo off
+setlocal enabledelayedexpansion
 REM Docker build, tag, login, and push script
 
-REM Set variables
-set IMAGE_NAME=sankalpam-api
-set VERSION=1.0.0
+REM ====================================================================
+REM Read artifactId and version from pom.xml
+REM ====================================================================
+set IMAGE_NAME=
+set VERSION=
+
+REM Parse artifactId: first <artifactId> tag in pom.xml that is NOT inside <parent>
+REM We use a simple approach: find lines with <artifactId> and pick the second one
+REM (first belongs to the parent block)
+set "_ART_COUNT=0"
+for /f "tokens=3 delims=<>" %%a in ('findstr "<artifactId>" pom.xml') do (
+    set /a _ART_COUNT+=1
+    if !_ART_COUNT! equ 2 set "IMAGE_NAME=%%a"
+)
+
+REM Parse version: second <version> tag in pom.xml
+REM (1st = parent version, 2nd = project version)
+set "_VER_COUNT=0"
+for /f "tokens=3 delims=<>" %%a in ('findstr "<version>" pom.xml') do (
+    set /a _VER_COUNT+=1
+    if !_VER_COUNT! equ 2 set "VERSION=%%a"
+)
+
+if not defined IMAGE_NAME set "IMAGE_NAME=sankalpam-api"
+if not defined VERSION set "VERSION=latest"
+
+echo [INFO] Detected from pom.xml: !IMAGE_NAME!:!VERSION!
+echo.
+
 set DOCKER_USERNAME=pavanbl
 set REGISTRY=docker.io
 

@@ -1,42 +1,33 @@
 package com.sankalpam.controller;
 
 import com.sankalpam.dto.ApiResponse;
-import com.sankalpam.dto.SankalpamRequest;
 import com.sankalpam.dto.SankalpamFinderRequest;
-import com.sankalpam.model.Sankalpam;
 import com.sankalpam.model.SankalpamFinder;
 import com.sankalpam.model.SankalpamPanchangaResponse;
 import com.sankalpam.service.SankalpamService;
 import com.sankalpam.service.CitySearchService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * REST Controller for Sankalpam operations.
- * CORS is handled globally in SecurityConfig; @CrossOrigin here is a safety fallback.
+ * CORS is handled globally in SecurityConfig.
  */
-@Slf4j
 @RestController
 @RequestMapping("/api/v1/sankalpam")
-@CrossOrigin(
-    origins  = {"http://localhost:5173", "http://localhost:4173", "https://panchangam-frontend.onrender.com"},
-    methods  = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS},
-    allowedHeaders = "*"
-)
-@RequiredArgsConstructor
 public class SankalpamController {
 
     private final SankalpamService sankalpamService;
     private final CitySearchService citySearchService;
+
+    public SankalpamController(SankalpamService sankalpamService, CitySearchService citySearchService) {
+        this.sankalpamService = sankalpamService;
+        this.citySearchService = citySearchService;
+    }
 
 
     /**
@@ -76,7 +67,7 @@ public class SankalpamController {
      * Searches for cities using Geoapify Autocomplete API.
      * Returns a list of matching city names.
      */
-    @GetMapping("/cities")
+    @GetMapping({"/cities", "/cities/"})
     public ResponseEntity<List<String>> searchCities(
             @RequestParam(value = "q", defaultValue = "") String searchTerm) {
 

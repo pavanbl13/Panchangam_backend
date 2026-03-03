@@ -10,7 +10,6 @@ import com.sankalpam.service.GeoapifyRateLimiter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;

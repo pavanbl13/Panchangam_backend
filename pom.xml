@@ -13,12 +13,13 @@
 
   <groupId>com.sankalpam</groupId>
   <artifactId>sankalpam-api</artifactId>
-  <version>1.0.0</version>
+  <version>2.0.0</version>
   <name>Sankalpam API</name>
   <description>REST API for Sankalpam form submission</description>
 
   <properties>
     <java.version>21</java.version>
+    <frontend.skip>false</frontend.skip>
   </properties>
 
   <dependencies>
@@ -68,6 +69,59 @@
 
   <build>
     <plugins>
+      <!-- ── Build React Frontend (skip with -Dfrontend.skip=true) ── -->
+      <plugin>
+        <groupId>com.github.eirslett</groupId>
+        <artifactId>frontend-maven-plugin</artifactId>
+        <version>1.15.0</version>
+        <configuration>
+          <workingDirectory>${project.basedir}/src/main/frontend</workingDirectory>
+          <skip>${frontend.skip}</skip>
+        </configuration>
+        <executions>
+          <execution>
+            <id>install-node-and-npm</id>
+            <goals><goal>install-node-and-npm</goal></goals>
+            <configuration>
+              <nodeVersion>v20.11.1</nodeVersion>
+            </configuration>
+          </execution>
+          <execution>
+            <id>npm-install</id>
+            <goals><goal>npm</goal></goals>
+            <configuration>
+              <arguments>ci</arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <id>npm-build</id>
+            <goals><goal>npm</goal></goals>
+            <configuration>
+              <arguments>run build</arguments>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- ── Copy built frontend to static resources ── -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-frontend-to-static</id>
+            <phase>generate-resources</phase>
+            <goals><goal>copy-resources</goal></goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/classes/static</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${project.basedir}/src/main/frontend/dist</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>

@@ -78,6 +78,10 @@ node_modules/
 npm-debug.log
 yarn-error.log
 
+# frontend-maven-plugin downloaded Node/npm
+src/main/frontend/node/
+src/main/frontend/node_modules/
+
 # OS
 Thumbs.db
 .DS_Store

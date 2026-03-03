@@ -23,6 +23,12 @@
     "timezone" : "Asia/Kolkata",
     "countryCode" : "in"
   },
+  "raipur" : {
+    "latitude" : 21.2380912,
+    "longitude" : 81.6336993,
+    "timezone" : "Asia/Kolkata",
+    "countryCode" : "in"
+  },
   "sydney" : {
     "latitude" : -33.8688,
     "longitude" : 151.2093,

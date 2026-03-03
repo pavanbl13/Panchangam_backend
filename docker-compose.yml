@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: sankalpam-api
     ports:
-      - "8081:8081"
+      - "8000:8000"
     environment:
       # Pass your Geoapify API key here
       GEOSEARCH_API_KEY: ${GEOSEARCH_API_KEY:-your-api-key-here}
@@ -29,7 +29,7 @@ services:
 
     # Health check
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8000/actuator/health"]
       interval: 30s
       timeout: 3s
       retries: 3

@@ -3,7 +3,7 @@ spring:
     name: sankalpam-api
 
 server:
-  port: 8081
+  port: 8000
   error:
     include-message: never
     include-stacktrace: never
@@ -25,15 +25,26 @@ management:
 info:
   app:
     name: Sankalpam API
-    version: 1.0.0
+    version: 2.0.0
 
 app:
   cors:
     allowed-origins:
-      - http://localhost:5173
-      - http://localhost:4173
-      - https://sankalpam-m05u.onrender.com
-      - http://sankalpam-m05u.onrender.com
+      - "*"
+    allowed-methods:
+      - GET
+      - POST
+      - OPTIONS
+    allowed-headers:
+      - Authorization
+      - Content-Type
+      - Accept
+      - X-Requested-With
+      - X-Request-ID
+    exposed-headers:
+      - X-Request-ID
+    allow-credentials: false
+    max-age: 3600
 
 logging:
   level:
