@@ -6,6 +6,7 @@ import com.sankalpam.model.SankalpamFinder;
 import com.sankalpam.model.SankalpamPanchangaResponse;
 import com.sankalpam.service.SankalpamService;
 import com.sankalpam.service.CitySearchService;
+import com.sankalpam.service.CityLookupService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,10 +24,14 @@ public class SankalpamController {
 
     private final SankalpamService sankalpamService;
     private final CitySearchService citySearchService;
+    private final CityLookupService cityLookupService;
 
-    public SankalpamController(SankalpamService sankalpamService, CitySearchService citySearchService) {
+    public SankalpamController(SankalpamService sankalpamService,
+                               CitySearchService citySearchService,
+                               CityLookupService cityLookupService) {
         this.sankalpamService = sankalpamService;
         this.citySearchService = citySearchService;
+        this.cityLookupService = cityLookupService;
     }
 
 
@@ -74,5 +79,15 @@ public class SankalpamController {
         List<String> matchingCities = citySearchService.searchCities(searchTerm);
 
         return ResponseEntity.ok(matchingCities);
+    }
+
+    /**
+     * GET /api/v1/sankalpam/cities/all
+     * Returns all city names currently cached in the local JSON lookup.
+     */
+    @GetMapping("/cities/all")
+    public ResponseEntity<List<String>> getAllCachedCities() {
+        List<String> allCities = cityLookupService.getAllCityNames();
+        return ResponseEntity.ok(allCities);
     }
 }

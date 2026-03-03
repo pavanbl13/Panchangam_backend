@@ -2,6 +2,7 @@ package com.sankalpam.service;
 
 import com.sankalpam.model.CityGeoInfo;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -31,5 +32,19 @@ public interface CityLookupService {
      * @return true if the city is in the cache
      */
     boolean exists(String city);
+
+    /**
+     * Search for cities whose name contains the query (case-insensitive).
+     * Supports partial/prefix matching so typing "raip" finds "Raipur".
+     * @param query the search text (partial city name)
+     * @return list of matching city names (properly capitalised)
+     */
+    List<String> searchByPrefix(String query);
+
+    /**
+     * Return all city names currently in the cache, properly capitalised.
+     * @return sorted list of all cached city names
+     */
+    List<String> getAllCityNames();
 }
 

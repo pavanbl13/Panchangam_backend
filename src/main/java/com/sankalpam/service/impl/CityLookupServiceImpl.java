@@ -15,10 +15,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -81,6 +83,46 @@ public class CityLookupServiceImpl implements CityLookupService {
             return false;
         }
         return cityCache.containsKey(city.toLowerCase().trim());
+    }
+
+    @Override
+    public List<String> searchByPrefix(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return List.of();
+        }
+        String lowerQuery = query.toLowerCase().trim();
+
+        // Match any city whose key contains the query (wildcard / substring match)
+        List<String> matches = cityCache.keySet().stream()
+                .filter(key -> key.contains(lowerQuery))
+                .map(this::capitalise)
+                .sorted()
+                .collect(Collectors.toList());
+
+        log.info("Local city search for '{}': {} match(es) -> {}", query, matches.size(), matches);
+        return matches;
+    }
+
+    @Override
+    public List<String> getAllCityNames() {
+        List<String> all = cityCache.keySet().stream()
+                .map(this::capitalise)
+                .sorted()
+                .collect(Collectors.toList());
+        log.info("Returning all {} cached city names", all.size());
+        return all;
+    }
+
+    /** Capitalise each word: "new york" → "New York" */
+    private String capitalise(String name) {
+        if (name == null || name.isEmpty()) return name;
+        String[] words = name.split("\\s+");
+        StringBuilder sb = new StringBuilder();
+        for (String w : words) {
+            if (!sb.isEmpty()) sb.append(' ');
+            sb.append(Character.toUpperCase(w.charAt(0))).append(w.substring(1));
+        }
+        return sb.toString();
     }
 
     private void persistToJson() {

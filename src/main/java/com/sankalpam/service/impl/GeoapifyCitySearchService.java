@@ -41,14 +41,23 @@ public class GeoapifyCitySearchService implements CitySearchService {
 
     @Override
     public List<String> searchCities(String query) {
-        List<String> cities = new ArrayList<>();
-
         log.info("City search request received with query: {}", query);
 
         if (query == null || query.trim().isEmpty()) {
             log.debug("Empty query provided, returning empty list");
-            return cities;
+            return new ArrayList<>();
         }
+
+        // ── Local-first: check the JSON cache before hitting the API ──
+        List<String> localMatches = cityLookupService.searchByPrefix(query);
+        if (!localMatches.isEmpty()) {
+            log.info("Returning {} city match(es) from local cache for '{}' — skipping Geoapify API", localMatches.size(), query);
+            return localMatches;
+        }
+
+        log.info("No local match for '{}' — falling back to Geoapify API", query);
+
+        List<String> cities = new ArrayList<>();
 
         String apiKey = geoSearchApiProperties.getKey() != null ? geoSearchApiProperties.getKey().trim() : null;
 

@@ -1,24 +1,70 @@
 package com.sankalpam.service.impl;
 
+import com.sankalpam.service.mapping.MappingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 /**
  * Unit tests for Maasam, Ruthuvu, and Vaaram extraction logic
  */
 @DisplayName("Panchanga Field Extraction Tests")
+@ExtendWith(MockitoExtension.class)
 class PanchangaExtractionTest {
 
+    @Mock
+    private MappingService mappingService;
+
+    @InjectMocks
     private SankalpamApiClientImpl apiClient;
 
     @BeforeEach
     void setUp() {
-        apiClient = new SankalpamApiClientImpl();
+        // Set up Maasam mappings
+        Map<String, Map<String, Object>> maasamMap = new LinkedHashMap<>();
+        maasamMap.put("Chaitramu", Map.of("range", "15/03-14/04", "months", List.of(3, 4)));
+        maasamMap.put("Vaisakhamu", Map.of("range", "15/04-14/05", "months", List.of(4, 5)));
+        maasamMap.put("Jyeshthamu", Map.of("range", "15/05-14/06", "months", List.of(5, 6)));
+        maasamMap.put("Ashadhamu", Map.of("range", "15/06-14/07", "months", List.of(6, 7)));
+        maasamMap.put("Sravanamu", Map.of("range", "15/07-14/08", "months", List.of(7, 8)));
+        maasamMap.put("Bhadrapadamu", Map.of("range", "15/08-14/09", "months", List.of(8, 9)));
+        maasamMap.put("Ashwayujamu", Map.of("range", "15/09-14/10", "months", List.of(9, 10)));
+        maasamMap.put("Karthikamu", Map.of("range", "15/10-14/11", "months", List.of(10, 11)));
+        maasamMap.put("Margasiramu", Map.of("range", "15/11-14/12", "months", List.of(11, 12)));
+        maasamMap.put("Pushyamu", Map.of("range", "15/12-14/01", "months", List.of(12, 1)));
+        maasamMap.put("Maghamu", Map.of("range", "15/01-14/02", "months", List.of(1, 2)));
+        maasamMap.put("Phalgunamu", Map.of("range", "15/02-14/03", "months", List.of(2, 3)));
+        lenient().when(mappingService.getAllMaasamMappings()).thenReturn(maasamMap);
+
+        // Set up Ruthuvu mappings
+        Map<String, Map<String, Object>> ruthuMap = new LinkedHashMap<>();
+        ruthuMap.put("Vasantha", Map.of("maasam", List.of("Chaitramu", "Vaisakhamu")));
+        ruthuMap.put("Greeshma", Map.of("maasam", List.of("Jyeshthamu", "Ashadhamu")));
+        ruthuMap.put("Varsha", Map.of("maasam", List.of("Sravanamu", "Bhadrapadamu")));
+        ruthuMap.put("Sharad", Map.of("maasam", List.of("Ashwayujamu", "Karthikamu")));
+        ruthuMap.put("Hemantha", Map.of("maasam", List.of("Margasiramu", "Pushyamu")));
+        ruthuMap.put("Shishira", Map.of("maasam", List.of("Maghamu", "Phalgunamu")));
+        lenient().when(mappingService.getAllRuthuMappings()).thenReturn(ruthuMap);
+
+        // Set up Vaasare (day of week) mappings
+        lenient().when(mappingService.mapVaasare("SUNDAY")).thenReturn("Bhanu");
+        lenient().when(mappingService.mapVaasare("MONDAY")).thenReturn("Indu");
+        lenient().when(mappingService.mapVaasare("TUESDAY")).thenReturn("Bhowma");
+        lenient().when(mappingService.mapVaasare("WEDNESDAY")).thenReturn("Soumya");
+        lenient().when(mappingService.mapVaasare("THURSDAY")).thenReturn("Bhruspati");
+        lenient().when(mappingService.mapVaasare("FRIDAY")).thenReturn("Bhrugu");
+        lenient().when(mappingService.mapVaasare("SATURDAY")).thenReturn("Sthira");
     }
 
     // ========== MAASAM EXTRACTION TESTS ==========
