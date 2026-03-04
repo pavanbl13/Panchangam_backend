@@ -1,0 +1,92 @@
+{
+  "samvatsaram": {
+    "Prabhava": "ప్రభవ", "Vibhava": "విభవ", "Shukla": "శుక్ల", "Pramodoota": "ప్రమోదూత",
+    "Prajotpathi": "ప్రజోత్పత్తి", "Aangirasa": "ఆంగీరస", "Shrimukha": "శ్రీముఖ", "Bhava": "భావ",
+    "Yuva": "యువ", "Dhaatu": "ధాతు", "Eeshwara": "ఈశ్వర", "Bahudhanya": "బహుధాన్య",
+    "Pramaadhi": "ప్రమాది", "Vikrama": "విక్రమ", "Vrusha": "వృష", "Chitrabhanu": "చిత్రభాను",
+    "Subhanu": "సుభాను", "Tharana": "తారణ", "Paarthiva": "పార్థివ", "Vyaya": "వ్యయ",
+    "Sarvajith": "సర్వజిత్", "Sarvadhari": "సర్వధారి", "Virodhi": "విరోధి", "Vikruthi": "వికృతి",
+    "Khara": "ఖర", "Nandana": "నందన", "Vijaya": "విజయ", "Jaya": "జయ",
+    "Manmatha": "మన్మథ", "Durmukhi": "దుర్ముఖి", "Hevilambi": "హేవిళంబి", "Vilambi": "విళంబి",
+    "Vikaari": "వికారి", "Shaarvari": "శార్వరి", "Plava": "ప్లవ", "Shubhakruthu": "శుభకృత్",
+    "Shobhakruthu": "శోభకృత్", "Krodhi": "క్రోధి", "viSvAvasu": "విశ్వావసు", "Parabhava": "పరాభవ",
+    "Plavanga": "ప్లవంగ", "Keelaka": "కీలక", "Saumya": "సౌమ్య", "Saadharana": "సాధారణ",
+    "Virodhikruthu": "విరోధికృత్", "Paridhavi": "పరిధావి", "Pramaadheecha": "ప్రమాదీచ", "Aananda": "ఆనంద",
+    "Raakshasa": "రాక్షస", "Anala": "అనల", "Pingala": "పింగళ", "Kaala Yuktha": "కాలయుక్త",
+    "Siddharthi": "సిద్ధార్థి", "Roudri": "రౌద్రి", "Durmathi": "దుర్మతి", "Dundubhi": "దుందుభి",
+    "Rudhirodgaari": "రుధిరోద్గారి", "Rakthaakshi": "రక్తాక్షి", "Krodhana": "క్రోధన", "Akshaya": "అక్షయ"
+  },
+  "ayanam": {
+    "Uttarayanam": "ఉత్తరాయణం", "uttarAyaNE": "ఉత్తరాయణం",
+    "Dakshinayanam": "దక్షిణాయనం", "dakshinAyaNE": "దక్షిణాయనం"
+  },
+  "ruthu": {
+    "Vasantha": "వసంత",
+    "Greeshma": "గ్రీష్మ",
+    "Varsha": "వర్ష",
+    "Sharath": "శరత్",
+    "Hemantha": "హేమంత",
+    "Shishira": "శిశిర"
+  },
+  "masam": {
+    "Chaitram": "చైత్రము", "Chaitramu": "చైత్రము", "Chaitra": "చైత్రము",
+    "Vaishakam": "వైశాఖము", "Vaisakhamu": "వైశాఖము", "Vaishakha": "వైశాఖము",
+    "Jyestam": "జ్యేష్ఠము", "Jyeshthamu": "జ్యేష్ఠము", "Jyeshtha": "జ్యేష్ఠము",
+    "Ashadam": "ఆషాఢము", "Ashadhamu": "ఆషాఢము", "Ashadha": "ఆషాఢము",
+    "Shravanam": "శ్రావణము", "Sravanamu": "శ్రావణము", "Shravana": "శ్రావణము",
+    "Badhrapadam": "భాద్రపదము", "Bhadrapadamu": "భాద్రపదము", "Bhadrapada": "భాద్రపదము",
+    "Ashwayujam": "ఆశ్వయుజము", "Ashwayujamu": "ఆశ్వయుజము", "Ashwija": "ఆశ్వయుజము",
+    "Karthikam": "కార్తీకము", "Karthikamu": "కార్తీకము", "Karthika": "కార్తీకము",
+    "Maargasiram": "మార్గశిరము", "Margasiramu": "మార్గశిరము", "Margasira": "మార్గశిరము",
+    "Pushyam": "పుష్యము", "Pushyamu": "పుష్యము", "Pushya": "పుష్యము",
+    "Maagham": "మాఘము", "Maghamu": "మాఘము", "Magha": "మాఘము",
+    "Phalgunam": "ఫాల్గుణము", "Phalgunamu": "ఫాల్గుణము", "Phalguna": "ఫాల్గుణము"
+  },
+  "paksham": {
+    "Shukla Paksham": "శుక్ల పక్షం", "Shukla": "శుక్ల పక్షం",
+    "Krishna Paksham": "కృష్ణ పక్షం", "Krishna": "కృష్ణ పక్షం"
+  },
+  "tithi": {
+    "Prathama": "ప్రథమ", "prathamyAm": "ప్రథమ",
+    "Dwitiya": "ద్వితీయ",
+    "Tritiya": "తృతీయ",
+    "Chaturthi": "చతుర్థి",
+    "Panchami": "పంచమి",
+    "Shashti": "షష్ఠి",
+    "Saptami": "సప్తమి",
+    "Ashtami": "అష్టమి",
+    "Navami": "నవమి",
+    "Dashami": "దశమి",
+    "Ekadashi": "ఏకాదశి",
+    "Dwadashi": "ద్వాదశి",
+    "Trayodashi": "త్రయోదశి",
+    "Chaturdashi": "చతుర్దశి",
+    "Pournami": "పౌర్ణమి",
+    "Amavasya": "అమావాస్య"
+  },
+  "vaasaram": {
+    "Bhanu Vaaram": "భాను వాసరం", "Bhanu Vaasaram (Sunday)": "భాను వాసరం",
+    "Soma Vaaram": "సోమ వాసరం", "Soma Vaasaram (Monday)": "సోమ వాసరం",
+    "Mangal Vaaram": "మంగళ వాసరం", "Mangala Vaasaram (Tuesday)": "మంగళ వాసరం",
+    "Budha Vaaram": "బుధ వాసరం", "Budha Vaasaram (Wednesday)": "బుధ వాసరం",
+    "Guru Vaaram": "గురు వాసరం", "Guru Vaasaram (Thursday)": "గురు వాసరం",
+    "Shukra Vaaram": "శుక్ర వాసరం", "Shukra Vaasaram (Friday)": "శుక్ర వాసరం",
+    "Shani Vaaram": "శని వాసరం", "Shani Vaasaram (Saturday)": "శని వాసరం",
+    "Soumya vAsara": "బుధ వాసరం", "Soumya": "బుధ వాసరం",
+    "Bhanu": "భాను వాసరం", "Indu": "సోమ వాసరం",
+    "Bhowma": "మంగళ వాసరం", "Bhruspati": "గురు వాసరం",
+    "Bhrugu": "శుక్ర వాసరం", "Sthira": "శని వాసరం"
+  },
+  "nakshatram": {
+    "Ashwini": "అశ్విని", "Bharani": "భరణి", "Krithika": "కృత్తిక",
+    "Rohini": "రోహిణి", "Mrigashira": "మృగశిర", "Ardra": "ఆర్ద్ర",
+    "Punarvasu": "పునర్వసు", "Pushyami": "పుష్యమి", "Ashlesha": "ఆశ్లేష",
+    "Magha": "మఘ", "Purva Phalguni": "పూర్వ ఫల్గుణి", "Uttara Phalguni": "ఉత్తర ఫల్గుణి",
+    "Hasta": "హస్త", "Chitra": "చిత్ర", "Swati": "స్వాతి",
+    "Vishaka": "విశాఖ", "Anuradha": "అనురాధ", "Jyeshtha": "జ్యేష్ఠ",
+    "Moola": "మూల", "Purva Ashadha": "పూర్వాషాఢ", "Uttara Ashadha": "ఉత్తరాషాఢ",
+    "Shravanam": "శ్రావణం", "Dhanishtha": "ధనిష్ఠ", "Shatabhisha": "శతభిష",
+    "Purva Bhadrapada": "పూర్వ భాద్రపద", "Uttara Bhadrapada": "ఉత్తర భాద్రపద", "Revati": "రేవతి",
+    "uttara phalguni": "ఉత్తర ఫల్గుణి"
+  }
+}

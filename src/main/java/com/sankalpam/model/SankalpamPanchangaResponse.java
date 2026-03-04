@@ -28,6 +28,8 @@ public class SankalpamPanchangaResponse {
     private String Sunset;
     @JsonProperty("validUntil")
     private String ValidUntil;
+    @JsonProperty("timezone")
+    private String Timezone;
 
     public String getSamvatsaram() {
         return Samvatsaram;
@@ -115,6 +117,14 @@ public class SankalpamPanchangaResponse {
 
     public void setValidUntil(String validUntil) {
         this.ValidUntil = validUntil;
+    }
+
+    public String getTimezone() {
+        return Timezone;
+    }
+
+    public void setTimezone(String timezone) {
+        this.Timezone = timezone;
     }
 }
 

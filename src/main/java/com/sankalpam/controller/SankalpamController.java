@@ -58,6 +58,7 @@ public class SankalpamController {
         panchanga.setSunrise(result.getSunrise());
         panchanga.setSunset(result.getSunset());
         panchanga.setValidUntil(result.getValidUntil());
+        panchanga.setTimezone(result.getTimezone());
 
         return ResponseEntity
                 .status(HttpStatus.OK)

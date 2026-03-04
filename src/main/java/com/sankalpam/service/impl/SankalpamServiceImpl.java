@@ -101,7 +101,9 @@ public class SankalpamServiceImpl implements SankalpamService {
         CityGeoInfo geoInfo = geoService.getGeoInfo(city);
         Coordinates coords = geoInfo.toCoordinates();
         String timezone = geoInfo.getTimezone();
-        return apiClient.fetchSankalpam(city, coords, timezone, request.getDate(), request.getTime());
+        SankalpamFinder result = apiClient.fetchSankalpam(city, coords, timezone, request.getDate(), request.getTime());
+        result.setTimezone(timezone);
+        return result;
     }
 
 

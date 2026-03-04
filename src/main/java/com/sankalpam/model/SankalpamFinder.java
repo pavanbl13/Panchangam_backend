@@ -30,6 +30,9 @@ public class SankalpamFinder {
     private String sunset;
     private String validUntil;
 
+    // Timezone for the city
+    private String timezone;
+
     private Instant createdAt;
 
     // Constructors
@@ -173,6 +176,14 @@ public class SankalpamFinder {
 
     public void setValidUntil(String validUntil) {
         this.validUntil = validUntil;
+    }
+
+    public String getTimezone() {
+        return timezone;
+    }
+
+    public void setTimezone(String timezone) {
+        this.timezone = timezone;
     }
 
     public Instant getCreatedAt() {

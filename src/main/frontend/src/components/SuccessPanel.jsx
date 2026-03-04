@@ -1,3 +1,5 @@
+import teluguMap from '../data/TeluguTranslations.json';
+
 export default function SuccessPanel({ submission, formData, onReset }) {
   const { data, message } = submission;
 
@@ -11,6 +13,20 @@ export default function SuccessPanel({ submission, formData, onReset }) {
     tithi: data.tithi,
     vaasaram: data.vaaram,
     nakshatram: data.nakshatram,
+  };
+
+  // Translate a panchanga value to Telugu using the lookup (case-insensitive)
+  const toTelugu = (category, value) => {
+    if (!value) return value;
+    const map = teluguMap[category];
+    if (!map) return value;
+    // Try exact match first
+    if (map[value]) return map[value];
+    if (map[value.trim()]) return map[value.trim()];
+    // Case-insensitive fallback: compare lowercase keys
+    const lowerVal = value.trim().toLowerCase();
+    const match = Object.keys(map).find(k => k.toLowerCase() === lowerVal);
+    return match ? map[match] : value;
   };
 
   // Format date as ordinal (e.g., "24th Feb 2026")
@@ -57,7 +73,7 @@ export default function SuccessPanel({ submission, formData, onReset }) {
     const hour = parseInt(hours);
     const ampm = hour >= 12 ? 'PM' : 'AM';
     const displayHour = hour % 12 || 12;
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const tz = data.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone;
     return `${displayHour.toString().padStart(2, '0')}:${minutes} ${ampm} ${tz}`;
   };
 
@@ -87,6 +103,21 @@ export default function SuccessPanel({ submission, formData, onReset }) {
               </p>
               <p className="panchanga-line">
                 <strong>{panchanga.vaasaram}</strong> vAsara, <strong>{panchanga.nakshatram}</strong> nakshatra yukthAyAm.
+              </p>
+            </div>
+
+            <div className="panchanga-verse telugu-text">
+              <p className="panchanga-line">
+                <strong>{toTelugu('samvatsaram', panchanga.samvatsaram)}</strong> నామ సంవత్సరే, <strong>{toTelugu('ayanam', panchanga.ayanam)}</strong>,
+              </p>
+              <p className="panchanga-line">
+                <strong>{toTelugu('ruthu', panchanga.ruthu)}</strong> ఋతువు, <strong>{toTelugu('masam', panchanga.masam)}</strong> మాసే,
+              </p>
+              <p className="panchanga-line">
+                <strong>{toTelugu('paksham', panchanga.paksham)}</strong> పక్షం, <strong>{toTelugu('tithi', panchanga.tithi)}</strong> శుభ తిథౌ,
+              </p>
+              <p className="panchanga-line">
+                <strong>{toTelugu('vaasaram', panchanga.vaasaram)}</strong> వాసర, <strong>{toTelugu('nakshatram', panchanga.nakshatram)}</strong> నక్షత్ర యుక్తాయాం.
               </p>
             </div>
           </div>

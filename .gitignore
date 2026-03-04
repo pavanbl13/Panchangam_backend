@@ -96,3 +96,4 @@ extract_excel_output.txt
 application-dev.yml
 application-local.yml
 
+*.txt
