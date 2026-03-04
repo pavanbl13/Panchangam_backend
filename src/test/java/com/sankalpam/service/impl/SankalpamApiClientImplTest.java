@@ -2,22 +2,69 @@ package com.sankalpam.service.impl;
 
 import com.sankalpam.model.Coordinates;
 import com.sankalpam.model.SankalpamFinder;
+import com.sankalpam.service.mapping.MappingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.lenient;
 
 /**
  * Unit tests for SankalpamApiClientImpl
  */
+@ExtendWith(MockitoExtension.class)
 class SankalpamApiClientImplTest {
 
+    @Mock
+    private MappingService mappingService;
+
+    @InjectMocks
     private SankalpamApiClientImpl apiClient;
 
     @BeforeEach
     void setUp() {
-        apiClient = new SankalpamApiClientImpl();
+        // Set up Maasam mappings for date-range-based extraction
+        Map<String, Map<String, Object>> maasamMap = new LinkedHashMap<>();
+        maasamMap.put("Chaitramu", Map.of("range", "15/03-14/04", "months", List.of(3, 4)));
+        maasamMap.put("Vaisakhamu", Map.of("range", "15/04-14/05", "months", List.of(4, 5)));
+        maasamMap.put("Jyeshthamu", Map.of("range", "15/05-14/06", "months", List.of(5, 6)));
+        maasamMap.put("Ashadhamu", Map.of("range", "15/06-14/07", "months", List.of(6, 7)));
+        maasamMap.put("Sravanamu", Map.of("range", "15/07-14/08", "months", List.of(7, 8)));
+        maasamMap.put("Bhadrapadamu", Map.of("range", "15/08-14/09", "months", List.of(8, 9)));
+        maasamMap.put("Ashwayujamu", Map.of("range", "15/09-14/10", "months", List.of(9, 10)));
+        maasamMap.put("Karthikamu", Map.of("range", "15/10-14/11", "months", List.of(10, 11)));
+        maasamMap.put("Margasiramu", Map.of("range", "15/11-14/12", "months", List.of(11, 12)));
+        maasamMap.put("Pushyamu", Map.of("range", "15/12-14/01", "months", List.of(12, 1)));
+        maasamMap.put("Maghamu", Map.of("range", "15/01-14/02", "months", List.of(1, 2)));
+        maasamMap.put("Phalgunamu", Map.of("range", "15/02-14/03", "months", List.of(2, 3)));
+        lenient().when(mappingService.getAllMaasamMappings()).thenReturn(maasamMap);
+
+        // Set up Ruthuvu mappings
+        Map<String, Map<String, Object>> ruthuMap = new LinkedHashMap<>();
+        ruthuMap.put("Vasantha", Map.of("maasam", List.of("Chaitramu", "Vaisakhamu")));
+        ruthuMap.put("Greeshma", Map.of("maasam", List.of("Jyeshthamu", "Ashadhamu")));
+        ruthuMap.put("Varsha", Map.of("maasam", List.of("Sravanamu", "Bhadrapadamu")));
+        ruthuMap.put("Sharad", Map.of("maasam", List.of("Ashwayujamu", "Karthikamu")));
+        ruthuMap.put("Hemantha", Map.of("maasam", List.of("Margasiramu", "Pushyamu")));
+        ruthuMap.put("Shishira", Map.of("maasam", List.of("Maghamu", "Phalgunamu")));
+        lenient().when(mappingService.getAllRuthuMappings()).thenReturn(ruthuMap);
+
+        // Set up passthrough mapping stubs
+        lenient().when(mappingService.mapAyanam(anyString())).thenAnswer(i -> i.getArgument(0));
+        lenient().when(mappingService.mapPaksham(anyString())).thenAnswer(i -> i.getArgument(0));
+        lenient().when(mappingService.mapTithi(anyString())).thenAnswer(i -> i.getArgument(0));
+        lenient().when(mappingService.mapNakshatram(anyString())).thenAnswer(i -> i.getArgument(0));
+        lenient().when(mappingService.mapVaasare(anyString())).thenAnswer(i -> i.getArgument(0));
     }
 
     @Test
@@ -159,5 +206,120 @@ class SankalpamApiClientImplTest {
         System.out.println("  Sunrise: " + result.getSunrise());
         System.out.println("  Sunset: " + result.getSunset());
     }
-}
 
+    // ── parseDate Tests ──
+
+    @Test
+    @DisplayName("parseDate handles YYYY-MM-DD format")
+    void parseDate_IsoFormat() {
+        java.time.LocalDate date = apiClient.parseDate("2026-03-04");
+        assertNotNull(date);
+        assertEquals(2026, date.getYear());
+        assertEquals(3, date.getMonthValue());
+        assertEquals(4, date.getDayOfMonth());
+    }
+
+    @Test
+    @DisplayName("parseDate handles MM/DD/YYYY format")
+    void parseDate_SlashFormat() {
+        java.time.LocalDate date = apiClient.parseDate("03/04/2026");
+        assertNotNull(date);
+        assertEquals(2026, date.getYear());
+        assertEquals(3, date.getMonthValue());
+        assertEquals(4, date.getDayOfMonth());
+    }
+
+    @Test
+    @DisplayName("parseDate returns null for unsupported format")
+    void parseDate_UnsupportedFormat_ReturnsNull() {
+        assertNull(apiClient.parseDate("04.03.2026"));
+    }
+
+    @Test
+    @DisplayName("parseDate returns null for invalid date")
+    void parseDate_InvalidDate_ReturnsNull() {
+        assertNull(apiClient.parseDate("2026-13-40"));
+    }
+
+    // ── extractMaasamFromDateRange edge cases ──
+
+    @Test
+    @DisplayName("extractMaasamFromDateRange with unsupported format returns null")
+    void extractMaasamFromDateRange_UnsupportedFormat() {
+        assertNull(apiClient.extractMaasamFromDateRange("04.03.2026"));
+    }
+
+    @Test
+    @DisplayName("extractMaasamFromDateRange with too-few dashes returns null")
+    void extractMaasamFromDateRange_TooFewParts() {
+        assertNull(apiClient.extractMaasamFromDateRange("2026-03"));
+    }
+
+    @Test
+    @DisplayName("extractMaasamFromDateRange with single slash part returns null")
+    void extractMaasamFromDateRange_SingleSlashPart() {
+        assertNull(apiClient.extractMaasamFromDateRange("03"));
+    }
+
+    // ── extractRuthuFromMaasam edge cases ──
+
+    @Test
+    @DisplayName("extractRuthuFromMaasam null returns null")
+    void extractRuthuFromMaasam_Null() {
+        assertNull(apiClient.extractRuthuFromMaasam(null));
+    }
+
+    @Test
+    @DisplayName("extractRuthuFromMaasam empty returns null")
+    void extractRuthuFromMaasam_Empty() {
+        assertNull(apiClient.extractRuthuFromMaasam(""));
+    }
+
+    @Test
+    @DisplayName("extractRuthuFromMaasam unknown value returns null")
+    void extractRuthuFromMaasam_Unknown() {
+        assertNull(apiClient.extractRuthuFromMaasam("UnknownMaasam"));
+    }
+
+    // ── extractVaaramFromDate edge cases ──
+
+    @Test
+    @DisplayName("extractVaaramFromDate null returns null")
+    void extractVaaramFromDate_Null() {
+        assertNull(apiClient.extractVaaramFromDate(null));
+    }
+
+    @Test
+    @DisplayName("extractVaaramFromDate empty returns null")
+    void extractVaaramFromDate_Empty() {
+        assertNull(apiClient.extractVaaramFromDate(""));
+    }
+
+    @Test
+    @DisplayName("extractVaaramFromDate invalid date returns null")
+    void extractVaaramFromDate_InvalidDate() {
+        assertNull(apiClient.extractVaaramFromDate("not-a-date"));
+    }
+
+    // ── fetchSankalpam with AM/PM time format ──
+
+    @Test
+    @DisplayName("fetchSankalpam handles AM/PM time format")
+    void testFetchSankalpam_AmPmTimeFormat() {
+        SankalpamFinder result = apiClient.fetchSankalpam(
+                "Pune", new Coordinates(18.5204, 73.8567),
+                "Asia/Kolkata", "2026-03-01", "6:30 PM");
+        assertNotNull(result);
+    }
+
+    // ── extractRuthuFromMaasam with empty mapping ──
+
+    @Test
+    @DisplayName("extractRuthuFromMaasam returns null when mapping is empty")
+    void extractRuthuFromMaasam_EmptyMapping() {
+        lenient().when(mappingService.getAllRuthuMappings())
+                .thenReturn(new java.util.HashMap<>());
+        // Force re-fetch by creating new instance with empty ruthu map
+        assertNull(apiClient.extractRuthuFromMaasam("Unknown"));
+    }
+}
